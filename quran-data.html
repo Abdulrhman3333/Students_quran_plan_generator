@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مخطط تحفيظ القرآن الكريم - 30 يوم</title>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2C5F2D;
+            --primary-light: #97BC62;
+            --accent: #D4AF37;
+            --bg: #F8F6F0;
+            --surface: #FFFFFF;
+            --text: #2C3E2D;
+            --border: #D5D0C1;
+            --shadow: rgba(44, 95, 45, 0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(135deg, #F8F6F0 0%, #E8E4D8 100%);
+            color: var(--text);
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: var(--surface);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px var(--shadow);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            padding: 2.5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0l30 30-30 30L0 30z' fill='%23ffffff' fill-opacity='0.05'/%3E%3C/svg%3E");
+            opacity: 0.3;
+        }
+
+        .header h1 {
+            font-family: 'Amiri', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            position: relative;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+            position: relative;
+        }
+
+        .form-container {
+            padding: 2rem;
+            background: var(--bg);
+            border-bottom: 2px solid var(--border);
+        }
+
+        .section-header {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--primary-light);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 1rem;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 0.875rem;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(44, 95, 45, 0.1);
+        }
+
+        .plan-selector {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .plan-option {
+            padding: 1.5rem;
+            border: 3px solid var(--border);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            background: white;
+        }
+
+        .plan-option:hover {
+            border-color: var(--primary-light);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px var(--shadow);
+        }
+
+        .plan-option.selected {
+            border-color: var(--primary);
+            background: linear-gradient(135deg, rgba(44, 95, 45, 0.05) 0%, rgba(151, 188, 98, 0.05) 100%);
+        }
+
+        .plan-option input[type="radio"] {
+            display: none;
+        }
+
+        .plan-option .title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .plan-option .description {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .btn-container {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 1rem 2.5rem;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(44, 95, 45, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+        }
+
+        .plan-display {
+            padding: 2rem;
+            display: none;
+        }
+
+        .plan-display.active {
+            display: block;
+        }
+
+        .plan-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%);
+            border-radius: 12px;
+            color: white;
+        }
+
+        .plan-header h2 {
+            font-family: 'Amiri', serif;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .days-grid {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .day-card {
+            background: white;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .day-card:hover {
+            box-shadow: 0 8px 24px var(--shadow);
+            transform: translateY(-2px);
+        }
+
+        .day-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--bg);
+        }
+
+        .day-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .day-content {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .section {
+            padding: 1rem;
+            background: var(--bg);
+            border-radius: 8px;
+        }
+
+        .section-title {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .section-content {
+            font-size: 1.05rem;
+            padding: 0.5rem;
+            background: white;
+            border-radius: 6px;
+        }
+
+        .ayah-range {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem;
+            background: white;
+            border-radius: 6px;
+            font-size: 0.95rem;
+        }
+
+        /* PDF Styles */
+        .pdf-page {
+            display: none;
+            background: white;
+            padding: 30px;
+            margin: 20px auto;
+            max-width: 210mm;
+            min-height: 297mm;
+        }
+
+        .pdf-page.active {
+            display: block;
+        }
+
+        .pdf-header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid var(--primary);
+        }
+
+        .pdf-header h1 {
+            font-family: 'Amiri', serif;
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .pdf-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+        }
+
+        .pdf-table th {
+            background: var(--primary);
+            color: white;
+            padding: 8px;
+            font-size: 0.9rem;
+            text-align: center;
+            border: 1px solid var(--primary);
+        }
+
+        .pdf-table td {
+            padding: 8px;
+            text-align: center;
+            border: 1px solid var(--border);
+            font-size: 0.85rem;
+            vertical-align: top;
+        }
+
+        .pdf-table tr:nth-child(even) {
+            background: #F9F9F9;
+        }
+
+        .pdf-day-header {
+            background: var(--primary-light);
+            color: white;
+            font-weight: 600;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .container, .form-container, .plan-display {
+                display: none !important;
+            }
+            .pdf-page {
+                display: block !important;
+                box-shadow: none;
+                page-break-after: always;
+                margin: 0;
+                padding: 15px;
+            }
+        }
+
+        .loading {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            display: none;
+            z-index: 1000;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            border: 4px solid var(--border);
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="loading" id="loading">
+        <div class="spinner"></div>
+        <p style="text-align: center; font-weight: 600;">جاري إنشاء الخطة...</p>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1>📖 مخطط تحفيظ القرآن الكريم - 30 يوم</h1>
+            <p>نظام متكامل لخطط الحفظ والمراجعة المخصصة</p>
+        </div>
+
+        <div class="form-container">
+            <div class="form-group" style="margin-bottom: 2rem;">
+                <label>اسم الطالب</label>
+                <input type="text" id="studentName" placeholder="أدخل اسم الطالب">
+            </div>
+
+            <!-- Memorization Section -->
+            <div class="section-header">📖 إعدادات الحفظ</div>
+            <div class="form-grid">
+                <div class="form-group" style="grid-column: 1 / -1;">
+                    <label>نوع خطة الحفظ</label>
+                    <div class="plan-selector">
+                        <label class="plan-option selected">
+                            <input type="radio" name="memPlan" value="1" checked onchange="updateMemorizationSurahs()">
+                            <div class="title">📄 صفحة واحدة يومياً</div>
+                            <div class="description">خطة الحفظ القياسية</div>
+                        </label>
+                        <label class="plan-option">
+                            <input type="radio" name="memPlan" value="0.5" onchange="updateMemorizationSurahs()">
+                            <div class="title">📃 نصف صفحة يومياً</div>
+                            <div class="description">خطة أبطأ وأكثر تركيزاً</div>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>بداية الحفظ - السورة</label>
+                    <select id="memStartSurah">
+                        <option value="">اختر السورة...</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Big Review Section -->
+            <div class="section-header">📚 إعدادات المراجعة الكبرى</div>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>بداية المراجعة - السورة</label>
+                    <select id="bigReviewSurah" onchange="updateBigReviewAyahOptions()">
+                        <!-- Will be populated by JS -->
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>بداية المراجعة - الآية</label>
+                    <select id="bigReviewAyah">
+                        <!-- Will be populated by JS -->
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>عدد الصفحات يومياً</label>
+                    <input type="number" id="bigReviewPages" value="5" min="1">
+                </div>
+            </div>
+
+            <div class="btn-container">
+                <button class="btn btn-primary" onclick="generatePlan()">🎯 إنشاء الخطة</button>
+                <button class="btn btn-secondary" onclick="downloadPDF()">📄 تحميل PDF</button>
+            </div>
+        </div>
+
+        <div class="plan-display" id="planDisplay">
+            <!-- Plan will be displayed here -->
+        </div>
+    </div>
+
+    <div id="pdfContainer"></div>
+
+    <script src="quran-data.js"></script>
+    <script>
+        // Embedded memorization data
+        const MEMORIZATION_DATA = {"1_page":{"data":["المرسلات 1 - 34","المرسلات 35 - الإنسان 14","الإنسان 15 - 31","القيامة","المدثر 1 - 31","المدثر32 - 56","المزمل 1 - 19","المزمل 20 - الجن 7","الجن 8 - 22","الجن 23 - نوح 10","نوح 11 - 28","المعارج 1 - 28","المعارج 29 - 44","الحاقة 1 - 24","الحاقة 25 - 52","القلم 1 - 33","القلم 34 - 52","الملك 1 - 12","الملك 13 - 30","التحريم 1","التحريم 2","الطلاق 1","الطلاق 2","التغابن 1","التغابن 2","المنافقون 1","المنافقون 0.5 + الجمعة 0.5","الجمعة 1","الصف 1","الصف 0.5 + الممتحنة 0.5","الممتحنة 1","الممتحنة 2","الحشر 1","الحشر 2","الحشر 3","الحشر 0.5 + المجادلة 0.5","المجادلة 1","المجادلة 2","المجادلة 3","الحديد 0.25+1","الحديد 2","الحديد 3","الحديد 4","الواقعة 1-35","الواقعة 36-67","الواقعة 68-96","الرحمن 1 - 32","الرحمن 33 - 54","الرحمن 55 - 78","القمر 0.25 + 1","القمر 2 + 0.25","النجم 1","النجم 2","النجم 0.5 + الطور 0.5","الطور 1","الطور 2","الذاريات 0.25 + 1","الذاريات 2 + 0.5","ق 1","ق 2","ق 3","الحجرات 0.5+1","الحجرات 2","الفتح 1","الفتح 2","الفتح 3","الفتح 4+0.5","محمد 1","محمد 2","محمد 3","محمد 4","الأحقاف 0.5+1","الأحقاف 2","الأحقاف 3","الأحقاف 4","الجاثية 1","الجاثية 2","الجاثية 3+0.5","الدخان 1","الدخان 2","الدخان 3","الزخرف 1","الزخرف 2","الزخرف 3","الزخرف 4","الزخرف 5","الزخرف 6","الزخرف 7","الشورى 1","الشورى 2","الشورى 3","الشورى 4","الشورى 5","الشورى 6","فصلت 1","فصلت 2","فصلت 3","فصلت 4","فصلت 5","فصلت 6","غافر 1","غافر 2","غافر 3","غافر 4","غافر 5","غافر 6","غافر 7","غافر 8","غافر 9","غافر 10","الزمر 1","الزمر 2","الزمر 3","الزمر 4","الزمر 5","الزمر 6","الزمر 7","الزمر 8","الزمر 9","ص 1","ص 2","ص 3","ص 4","ص 5","الصافات 1","الصافات 2","الصافات 3","الصافات 4","الصافات 5","الصافات 6","الصافات 7","يس 1","يس 2","يس 3","يس 4","يس 5","يس 6","فاطر 0.5+1","فاطر 2","فاطر 3","فاطر 4","فاطر 5","سبأ 1","سبأ 2","سبأ 3","سبأ 4","سبأ 5","سبأ 6+0.5","الأحزاب 1","الأحزاب 2","الأحزاب 3","الأحزاب 4","الأحزاب 5","الأحزاب 6","الأحزاب 7","الأحزاب 8","الأحزاب 9","الأحزاب 10","السجدة 1","السجدة 2","السجدة 3","لقمان 1","لقمان 2","لقمان 3","لقمان 4","الروم 0.25+1","الروم 2","الروم 3","الروم 4","الروم 5","الروم 6","العنكبوت 0.5+1","العنكبوت 2","العنكبوت 3","العنكبوت 4","العنكبوت 5","العنكبوت 6","العنكبوت 7","العنكبوت 8","القصص 1","القصص 2","القصص 3","القصص 4","القصص 5","القصص 6","القصص 7","القصص 8","القصص 9","القصص 10","القصص 11","النمل 1","النمل 2","النمل 3","النمل 4","النمل 5","النمل 6","النمل 7","النمل 8+0.5","الشعراء 1","الشعراء 2","الشعراء 3","الشعراء 4","الشعراء 5","الشعراء 6","الشعراء 7","الشعراء 8","الشعراء 9","الشعراء 10","الفرقان 0.25+1","الفرقان 2","الفرقان 3","الفرقان 4","الفرقان 5","الفرقان 6","الفرقان 7","النور 1","النور 2","النور 3","النور 4","النور 5","النور 6","النور 7","النور 8","النور 9","النور 10","المؤمنون 1","المؤمنون 2","المؤمنون 3","المؤمنون 4","المؤمنون 5","المؤمنون 6","المؤمنون 7","المؤمنون 8","الحج 1","الحج 2","الحج 3","الحج 4","الحج 5","الحج 6","الحج 7","الحج 8","الحج 9","الحج 10","الأنبياء 1","الأنبياء 2","الأنبياء 3","الأنبياء 4","الأنبياء 5","الأنبياء 6","الأنبياء 7","الأنبياء 8","الأنبياء 9","الأنبياء 10","طه 0.5+1","طه 2","طه 3","طه 4","طه 5","طه 6","طه 7","طه 8","طه 9","طه 10","مريم 1","مريم 2","مريم 3","مريم 4","مريم 5","مريم 6","مريم 7","الكهف 1","الكهف 2","الكهف 3","الكهف 4","الكهف 5","الكهف 6","الكهف 7","الكهف 8","الكهف 9","الكهف 10","الكهف 11","الإسراء 1","الإسراء 2","الإسراء 3","الإسراء 4","الإسراء 5","الإسراء 6","الإسراء 7","الإسراء 8","الإسراء 9","الإسراء 10","الإسراء 11+0.5","النحل 0.5+1","النحل 2","النحل 3","النحل 4","النحل 5","النحل 6","النحل 7","النحل 8","النحل 9","النحل 10","النحل 11","النحل 12","النحل 13","النحل 14","الحجر 1","الحجر 2","الحجر 3","الحجر 4","الحجر 5+0.5","إبراهيم 0.75","إبراهيم 2","إبراهيم 3","إبراهيم 4","إبراهيم 5","إبراهيم 6","إبراهيم 7","الرعد 1","الرعد 2","الرعد 3","الرعد 4","الرعد 5","الرعد 6","يوسف 0.25+1","يوسف 2","يوسف 3","يوسف 4","يوسف 5","يوسف 6","يوسف 7","يوسف 8","يوسف 9","يوسف 10","يوسف 11","يوسف 12","يوسف 13","هود 0.5+1","هود 2","هود 3","هود 4","هود 5","هود 6","هود 7","هود 8","هود 9","هود 10","هود 11","هود 12","هود 13","هود 14","يونس 1","يونس 2","يونس 3","يونس 4","يونس 5","يونس 6","يونس 7","يونس 8","يونس 9","يونس 10","يونس 11","يونس 12","يونس 13+0.5","التوبة 1","التوبة 2","التوبة 3","التوبة 4","التوبة 5","التوبة 6","التوبة 7","التوبة 8","التوبة 9","التوبة 10","التوبة 11","التوبة 12","التوبة 13","التوبة 14","التوبة 15","التوبة 16","التوبة 17","التوبة 18","التوبة 19","التوبة 20","التوبة 21","الأنفال 1","الأنفال 2","الأنفال 3","الأنفال 4","الأنفال 5","الأنفال 6","الأنفال 7","الأنفال 8","الأنفال 9","الأنفال 10","الأعراف 1","الأعراف 2","الأعراف 3","الأعراف 4","الأعراف 5","الأعراف 6","الأعراف 7","الأعراف 8","الأعراف 9","الأعراف 10","الأعراف 11","الأعراف 12","الأعراف 13","الأعراف 14","الأعراف 15","الأعراف 16","الأعراف 17","الأعراف 18","الأعراف 19","الأعراف 20","الأعراف 21","الأعراف 22","الأعراف 23","الأعراف 24","الأعراف 25","الأعراف 26","الأنعام 1","الأنعام 2","الأنعام 3","الأنعام 4","الأنعام 5","الأنعام 6","الأنعام 7","الأنعام 8","الأنعام 9","الأنعام 10","الأنعام 11","الأنعام 12","الأنعام 13","الأنعام 14","الأنعام 15","الأنعام 16","الأنعام 17","الأنعام 18","الأنعام 19","الأنعام 20","الأنعام 21","الأنعام 22","الأنعام 23","المائدة 0.5+1","المائدة 2","المائدة 3","المائدة 4","المائدة 5","المائدة 6","المائدة 7","المائدة 8","المائدة 9","المائدة 10","المائدة 11","المائدة 12","المائدة 13","المائدة 14","المائدة 15","المائدة 16","المائدة 17","المائدة 18","المائدة 19","المائدة 20","المائدة 21","النساء 1","النساء 2","النساء 3","النساء 4","النساء 5","النساء 6","النساء 7","النساء 8","النساء 9","النساء 10","النساء 11","النساء 12","النساء 13","النساء 14","النساء 15","النساء 16","النساء 17","النساء 18","النساء 19","النساء 20","النساء 21","النساء 22","النساء 23","النساء 24","النساء 25","النساء 26","النساء 27","النساء 28","النساء 29+0.25","آل عمران 1","آل عمران 2","آل عمران 3","آل عمران 4","آل عمران 5","آل عمران 6","آل عمران 7","آل عمران 8","آل عمران 9","آل عمران 10","آل عمران 11","آل عمران 12","آل عمران 13","آل عمران 14","آل عمران 15","آل عمران 16","آل عمران 17","آل عمران 18","آل عمران 19","آل عمران 20","آل عمران 21","آل عمران 22","آل عمران 23","آل عمران 24","آل عمران 25","آل عمران 26","آل عمران 27","البقرة 0.5+1","البقرة 2","البقرة 3","البقرة 4","البقرة 5","البقرة 6","البقرة 7","البقرة 8","البقرة 9","البقرة 10","البقرة 11","البقرة 12","البقرة 13","البقرة 14","البقرة 15","البقرة 16","البقرة 17","البقرة 18","البقرة 19","البقرة 20","البقرة 21","البقرة 22","البقرة 23","البقرة 24","البقرة 25","البقرة 26","البقرة 27","البقرة 28","البقرة 29","البقرة 30","البقرة 31","البقرة 32","البقرة 33","البقرة 34","البقرة 35","البقرة 36","البقرة 37","البقرة 38","البقرة 39","البقرة 40","البقرة 41","البقرة 42","البقرة 43","البقرة 44","البقرة 45","البقرة 46","البقرة 47"],"index":{"المرسلات":0,"الإنسان":2,"القيامة":3,"المدثر":4,"المدثر32":5,"المزمل":6,"الجن":8,"نوح":10,"المعارج":11,"الحاقة":13,"القلم":15,"الملك":17,"التحريم":19,"الطلاق":21,"التغابن":23,"المنافقون":25,"الجمعة":27,"الصف":28,"الممتحنة":30,"الحشر":32,"المجادلة":36,"الحديد":39,"الواقعة":43,"الرحمن":46,"القمر":49,"النجم":51,"الطور":54,"الذاريات":56,"ق":58,"الحجرات":61,"الفتح":63,"محمد":67,"الأحقاف":71,"الجاثية":75,"الدخان":78,"الزخرف":81,"الشورى":88,"فصلت":94,"غافر":100,"الزمر":110,"ص":119,"الصافات":124,"يس":131,"فاطر":137,"سبأ":142,"الأحزاب":148,"السجدة":158,"لقمان":161,"الروم":165,"العنكبوت":171,"القصص":179,"النمل":190,"الشعراء":198,"الفرقان":208,"النور":215,"المؤمنون":225,"الحج":233,"الأنبياء":243,"طه":253,"مريم":263,"الكهف":270,"الإسراء":281,"النحل":292,"الحجر":306,"إبراهيم":311,"الرعد":318,"يوسف":324,"هود":337,"يونس":351,"التوبة":364,"الأنفال":385,"الأعراف":395,"الأنعام":421,"المائدة":444,"النساء":465,"آل":494,"البقرة":521}},"0.5_page":{"data":["الناس - العاديات","البينة - القدر","العلق - التين","الضحى - الشرح","الليل","الشمس","البلد","الفجر","الغاشية","الطارق","الأعلى","البروج","الإنشقاق","التكوير","عبس","النازعات","النبأ","المرسلات 1- 19","المرسلات 20 - 37","المرسلات 38 - 50","الإنسان 1 - 9","الإنسان 10 - 22","الإنسان 23 - 31","القيامة 1 - 19","القيامة 20 - 40","المدثر 1 - 30","المدثر 31 - 37","المدثر 38 - 56","المزمل 1 - 11","المزمل 12 - 19","المزمل 20","الجن 1 - 13","الجن 14 - 28","نوح 1 - 10","نوح 11 - 20","نوح 21 - 28","المعارج 1 - 18","المعارج 19 - 31","المعارج 32 - 44","الحاقة 1 - 12","الحاقة 13 - 24","الحاقة 25 - 39","الحاقة 40 - 52","القلم 1 - 16","القلم 17 - 33","القلم 34 - 45","القلم 46 - 52","الملك 1 - 6","الملك 7 - 12","الملك 13 - 22","الملك 23 - 30","التحريم 1 - 4","التحريم 5 - 7","التحريم 8 - 9","التحريم 10 - 12","الطلاق 1 - 2","الطلاق 3 - 5","الطلاق 6 - 9","الطلاق 10 - 12","التغابن 1 - 5","التغابن 6 - 9","التغابن 10 - 13","التغابن 14 - 18","المنافقون 1 - 4","المنافقون 5 - 7","المنافقون 8 - 11","الجمعة 1 - 4","الجمعة 5 - 8","الجمعة 9 - 11","الصف 1 - 5","الصف 6 - 9","الصف 10 - 14","الممتنحة 1 - 3","الممتحنة 4 - 5","الممتحنة 6 - 9","الممتحنة 10 - 11","الممتحنة 12 - 13","الحشر 1 - 3","الحشر 4 - 7","الحشر 8 - 9","الحشر 10 - 12","الحشر 13 - 17","الحشر 18 - 21","الحشر 22 - 24","المجادلة 1 - 3","المجادلة 4 - 6","المجادلة 7 - 8","المجادلة 9 - 11","المجادلة 12 - 15","المجادلة 16 - 21","المجادلة 22 - 22","الحديد 1 - 6","الحديد 7 - 11","الحديد 12 - 14","الحديد 15 - 18","الحديد 19 - 20","الحديد 21 - 24","الحديد 25 - 26","الحديد 27 - 29","الواقعة 1 - 16","الواقعة 17 - 40","الواقعة 41 - 50","الواقعة 51 - 62","الواقعة 63 - 74","الواقعة 75 - 85","الواقعة 86 - 96","الرحمن 1 - 18","الرحمن 19 - 32","الرحمن 33 - 41","الرحمن 42 - 55","الرحمن 56 - 69","الرحمن 70 - 78","القمر 1 - 6","القمر 7 - 17","القمر 18 - 27","القمر 28 - 36","القمر 37 - 49","القمر 50 - 55","النجم 1 - 18","النجم 19 - 26","النجم 27 - 31","النجم 32 - 44","النجم 45 - 62","الطور 1 - 14","الطور 15 - 21","الطور 22 - 31","الطور 32 - 40","الطور 41 - 49","الذاريات 1 - 18","الذاريات 19 - 30","الذاريات 31 - 42","الذاريات 43 - 51","الذاريات 52 - 60","ق 1 - 8","ق 9 - 15","ق 16 - 26","ق 27 - 35","ق 36 - 39","ق 40 - 45","الحجرات 1 - 4","الحجرات 5 - 8","الحجرات 9 - 11","الحجرات 12 - 14","الحجرات 15 - 18","الفتح 1 - 5","الفتح 6 - 9","الفتح 10 - 11","الفتح 12 - 15","الفتح 16 - 19","الفتح 20 - 23","الفتح 24 - 25","الفتح 26 - 28","الفتح 29 - 29","محمد 1 - 6","محمد 7 - 11","محمد 12 - 15","محمد 16 - 19","محمد 20 - 23","محمد 24 - 29","محمد 30 - 33","محمد 34 - 38","الأحقاف 1 - 5","الأحقاف 6 - 10","الأحقاف 11 - 14","الأحقاف 15 - 16","الأحقاف 17 - 20","الأحقاف 21 - 25","الأحقاف 26 - 28","الأحقاف 29 - 32","الأحقاف 33 - 35"],"index":{"الناس":0,"البينة":1,"العلق":2,"الضحى":3,"الليل":4,"الشمس":5,"البلد":6,"الفجر":7,"الغاشية":8,"الطارق":9,"الأعلى":10,"البروج":11,"الإنشقاق":12,"التكوير":13,"عبس":14,"النازعات":15,"النبأ":16,"المرسلات":17,"الإنسان":20,"القيامة":23,"المدثر":25,"المزمل":28,"الجن":31,"نوح":33,"المعارج":36,"الحاقة":39,"القلم":43,"الملك":47,"التحريم":51,"الطلاق":55,"التغابن":59,"المنافقون":63,"الجمعة":66,"الصف":69,"الممتنحة":72,"الممتحنة":73,"الحشر":77,"المجادلة":84,"الحديد":91,"الواقعة":99,"الرحمن":106,"القمر":112,"النجم":118,"الطور":123,"الذاريات":128,"ق":133,"الحجرات":139,"الفتح":144,"محمد":153,"الأحقاف":161}}};
+
+        let memorizationData = MEMORIZATION_DATA;
+        let currentPlan = null;
+
+        // Initialize form when page loads
+        window.addEventListener('DOMContentLoaded', function() {
+            initializeForm();
+        });
+
+        function initializeForm() {
+            populateBigReviewDropdowns();
+            updateMemorizationSurahs();
+            setupPlanSelector();
+        }
+
+        function setupPlanSelector() {
+            const options = document.querySelectorAll('.plan-option');
+            options.forEach(option => {
+                option.addEventListener('click', function() {
+                    options.forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                });
+            });
+        }
+
+        function updateMemorizationSurahs() {
+            if (!memorizationData) return;
+            
+            const planType = document.querySelector('input[name="memPlan"]:checked').value;
+            const planKey = planType === "1" ? "1_page" : "0.5_page";
+            const surahSelect = document.getElementById('memStartSurah');
+            
+            surahSelect.innerHTML = '<option value="">اختر السورة...</option>';
+            
+            const index = memorizationData[planKey].index;
+            const sortedSurahs = Object.keys(index).sort((a, b) => index[a] - index[b]);
+            
+            sortedSurahs.forEach(surah => {
+                const option = document.createElement('option');
+                option.value = surah;
+                option.textContent = surah;
+                surahSelect.appendChild(option);
+            });
+            
+            // Set default to المرسلات
+            if (sortedSurahs.includes('المرسلات')) {
+                surahSelect.value = 'المرسلات';
+            }
+        }
+
+        function populateBigReviewDropdowns() {
+            const bigRevSurah = document.getElementById('bigReviewSurah');
+            
+            for (let i = 1; i < QuranData.Sura.length; i++) {
+                const surah = QuranData.Sura[i];
+                if (surah && surah.length > 0) {
+                    const option = document.createElement('option');
+                    option.value = i;
+                    option.textContent = `${i}. ${surah[4]}`;
+                    bigRevSurah.appendChild(option);
+                }
+            }
+
+            bigRevSurah.value = 78; // Default: An-Naba
+            updateBigReviewAyahOptions();
+        }
+
+        function updateBigReviewAyahOptions() {
+            const surahSelect = document.getElementById('bigReviewSurah');
+            const ayahSelect = document.getElementById('bigReviewAyah');
+            const surahIndex = parseInt(surahSelect.value);
+            const surah = QuranData.Sura[surahIndex];
+            
+            ayahSelect.innerHTML = '';
+            
+            if (surah) {
+                const ayahCount = surah[1];
+                for (let i = 1; i <= ayahCount; i++) {
+                    const option = document.createElement('option');
+                    option.value = i;
+                    option.textContent = i;
+                    ayahSelect.appendChild(option);
+                }
+            }
+        }
+
+        function getAbsoluteAyahNumber(surahIndex, ayahNumber) {
+            const surah = QuranData.Sura[surahIndex];
+            return surah[0] + ayahNumber;
+        }
+
+        function getSurahAndAyahFromAbsolute(absoluteAyah) {
+            for (let i = 1; i < QuranData.Sura.length; i++) {
+                const surah = QuranData.Sura[i];
+                const nextSurah = QuranData.Sura[i + 1];
+                
+                if (nextSurah && absoluteAyah >= surah[0] && absoluteAyah < nextSurah[0]) {
+                    return {
+                        surah: i,
+                        ayah: absoluteAyah - surah[0],
+                        surahName: surah[4],
+                        totalAyahs: surah[1]
+                    };
+                } else if (!nextSurah && absoluteAyah >= surah[0]) {
+                    return {
+                        surah: i,
+                        ayah: absoluteAyah - surah[0],
+                        surahName: surah[4],
+                        totalAyahs: surah[1]
+                    };
+                }
+            }
+            return null;
+        }
+
+        function getPageForAyah(surahIndex, ayahNumber) {
+            const absoluteAyah = getAbsoluteAyahNumber(surahIndex, ayahNumber);
+            
+            for (let i = 1; i < QuranData.Page.length; i++) {
+                const currentPage = QuranData.Page[i];
+                const nextPage = QuranData.Page[i + 1];
+                
+                const currentAbsolute = getAbsoluteAyahNumber(currentPage[0], currentPage[1]);
+                
+                if (nextPage) {
+                    const nextAbsolute = getAbsoluteAyahNumber(nextPage[0], nextPage[1]);
+                    if (absoluteAyah >= currentAbsolute && absoluteAyah < nextAbsolute) {
+                        return i;
+                    }
+                } else {
+                    if (absoluteAyah >= currentAbsolute) {
+                        return i;
+                    }
+                }
+            }
+            return 604;
+        }
+
+        function generatePlan() {
+            const studentName = document.getElementById('studentName').value.trim();
+            if (!studentName) {
+                alert('الرجاء إدخال اسم الطالب');
+                return;
+            }
+
+            if (!memorizationData) {
+                alert('جاري تحميل بيانات الحفظ... الرجاء المحاولة مرة أخرى');
+                return;
+            }
+
+            const memStartSurah = document.getElementById('memStartSurah').value;
+            if (!memStartSurah) {
+                alert('الرجاء اختيار سورة بداية الحفظ');
+                return;
+            }
+
+            const memPlan = document.querySelector('input[name="memPlan"]:checked').value;
+            const bigRevSurah = parseInt(document.getElementById('bigReviewSurah').value);
+            const bigRevAyah = parseInt(document.getElementById('bigReviewAyah').value);
+            const bigReviewPages = parseInt(document.getElementById('bigReviewPages').value);
+
+            document.getElementById('loading').classList.add('active');
+
+            setTimeout(() => {
+                const plan = create30DayPlan({
+                    studentName,
+                    memPlan,
+                    memStartSurah,
+                    bigRevSurah,
+                    bigRevAyah,
+                    bigReviewPages
+                });
+
+                currentPlan = plan;
+                displayPlan(plan);
+                document.getElementById('loading').classList.remove('active');
+            }, 500);
+        }
+
+        function create30DayPlan(config) {
+            const days = [];
+            const planKey = config.memPlan === "1" ? "1_page" : "0.5_page";
+            const planData = memorizationData[planKey];
+            
+            // Find starting index for memorization
+            const startIndex = planData.index[config.memStartSurah];
+            if (startIndex === undefined) {
+                alert('لم يتم العثور على السورة المحددة في خطة الحفظ');
+                return null;
+            }
+            
+            // Get starting page for big review
+            const bigRevStartPage = getPageForAyah(config.bigRevSurah, config.bigRevAyah);
+            let currentBigRevPage = bigRevStartPage;
+
+            for (let day = 1; day <= 30; day++) {
+                const memIndex = startIndex + day - 1;
+                
+                const dayPlan = {
+                    day: day,
+                    memorization: memIndex < planData.data.length ? planData.data[memIndex] : '',
+                    minorReview: '',
+                    bigReview: []
+                };
+
+                // Minor Review = Previous day's memorization
+                if (day > 1) {
+                    const prevMemIndex = startIndex + day - 2;
+                    dayPlan.minorReview = prevMemIndex < planData.data.length ? planData.data[prevMemIndex] : '';
+                }
+
+                // Big Review - cycle through pages
+                if (config.bigReviewPages > 0) {
+                    const startPage = currentBigRevPage;
+                    let endPage = currentBigRevPage + config.bigReviewPages - 1;
+                    
+                    if (endPage > 604) {
+                        endPage = 604;
+                    }
+                    
+                    const startPageData = QuranData.Page[startPage];
+                    const endPageData = QuranData.Page[endPage + 1] || QuranData.Page[604];
+                    
+                    const fromAbsolute = getAbsoluteAyahNumber(startPageData[0], startPageData[1]);
+                    const toAbsolute = getAbsoluteAyahNumber(endPageData[0], endPageData[1]) - 1;
+                    
+                    const fromInfo = getSurahAndAyahFromAbsolute(fromAbsolute);
+                    const toInfo = getSurahAndAyahFromAbsolute(toAbsolute);
+                    
+                    if (fromInfo && toInfo) {
+                        dayPlan.bigReview.push({
+                            from: fromInfo,
+                            to: toInfo,
+                            startPage: startPage,
+                            endPage: endPage
+                        });
+                    }
+                    
+                    currentBigRevPage = endPage + 1;
+                    
+                    if (currentBigRevPage > 604) {
+                        currentBigRevPage = bigRevStartPage;
+                    }
+                }
+
+                days.push(dayPlan);
+            }
+
+            return {
+                studentName: config.studentName,
+                memPlan: config.memPlan,
+                memStartSurah: config.memStartSurah,
+                bigRevStartPage: bigRevStartPage,
+                bigReviewPages: config.bigReviewPages,
+                days: days
+            };
+        }
+
+        function displayPlan(plan) {
+            if (!plan) return;
+            
+            const container = document.getElementById('planDisplay');
+            
+            const planName = plan.memPlan === "1" ? "صفحة واحدة يومياً" : "نصف صفحة يومياً";
+            
+            let html = `
+                <div class="plan-header">
+                    <h2>خطة الطالب: ${plan.studentName}</h2>
+                    <p>خطة الحفظ: ${planName} | بداية الحفظ: ${plan.memStartSurah}</p>
+                    <p>المراجعة الكبرى: ${plan.bigReviewPages} صفحات يومياً من صفحة ${plan.bigRevStartPage}</p>
+                </div>
+
+                <div class="days-grid">
+            `;
+
+            plan.days.forEach(day => {
+                html += `
+                    <div class="day-card">
+                        <div class="day-header">
+                            <span class="day-number">اليوم ${day.day}</span>
+                        </div>
+                        <div class="day-content">
+                `;
+
+                // Memorization
+                if (day.memorization) {
+                    html += `
+                        <div class="section">
+                            <div class="section-title">📖 الحفظ</div>
+                            <div class="section-content">
+                                ${day.memorization}
+                            </div>
+                        </div>
+                    `;
+                }
+
+                // Minor Review
+                if (day.minorReview) {
+                    html += `
+                        <div class="section">
+                            <div class="section-title">🔄 المراجعة الصغرى</div>
+                            <div class="section-content">
+                                ${day.minorReview}
+                            </div>
+                        </div>
+                    `;
+                } else if (day.day === 1) {
+                    html += `
+                        <div class="section">
+                            <div class="section-title">🔄 المراجعة الصغرى</div>
+                            <div class="section-content" style="color: #999; font-style: italic;">
+                                لا يوجد (اليوم الأول)
+                            </div>
+                        </div>
+                    `;
+                }
+
+                // Big Review
+                if (day.bigReview.length > 0) {
+                    html += `
+                        <div class="section">
+                            <div class="section-title">📚 المراجعة الكبرى</div>
+                            <div class="section-content">
+                    `;
+                    day.bigReview.forEach(item => {
+                        html += `
+                            <div class="ayah-range">
+                                <span>من: <strong>${item.from.surahName}</strong> آية ${item.from.ayah}</span>
+                                <span>إلى: <strong>${item.to.surahName}</strong> آية ${item.to.ayah}</span>
+                            </div>
+                            <div style="text-align: center; color: var(--primary); font-weight: 600; margin-top: 0.5rem;">
+                                صفحة ${item.startPage} - ${item.endPage}
+                            </div>
+                        `;
+                    });
+                    html += `</div></div>`;
+                }
+
+                html += `</div></div>`;
+            });
+
+            html += `</div>`;
+            
+            container.innerHTML = html;
+            container.classList.add('active');
+            container.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function downloadPDF() {
+            if (!currentPlan) {
+                alert('الرجاء إنشاء خطة أولاً');
+                return;
+            }
+
+            const pdfContainer = document.getElementById('pdfContainer');
+            const planName = currentPlan.memPlan === "1" ? "صفحة واحدة يومياً" : "نصف صفحة يومياً";
+            
+            let html = `
+                <div class="pdf-page active">
+                    <div class="pdf-header">
+                        <h1>خطة تحفيظ القرآن الكريم - 30 يوم</h1>
+                        <p style="font-size: 1.1rem; margin-top: 8px;"><strong>الطالب:</strong> ${currentPlan.studentName}</p>
+                        <p style="font-size: 1rem;"><strong>خطة الحفظ:</strong> ${planName} | بداية: ${currentPlan.memStartSurah}</p>
+                        <p style="font-size: 1rem;"><strong>المراجعة الكبرى:</strong> ${currentPlan.bigReviewPages} صفحات يومياً</p>
+                    </div>
+                    
+                    <table class="pdf-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 40px;">اليوم</th>
+                                <th>الحفظ</th>
+                                <th>المراجعة الصغرى</th>
+                                <th>المراجعة الكبرى</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+
+            currentPlan.days.forEach(day => {
+                html += `<tr>`;
+                html += `<td class="pdf-day-header">${day.day}</td>`;
+                html += `<td>${day.memorization || '-'}</td>`;
+                
+                html += `<td>`;
+                if (day.minorReview) {
+                    html += day.minorReview;
+                } else if (day.day === 1) {
+                    html += '<span style="color: #999;">لا يوجد</span>';
+                } else {
+                    html += '-';
+                }
+                html += `</td>`;
+                
+                html += `<td>`;
+                if (day.bigReview.length > 0) {
+                    day.bigReview.forEach(item => {
+                        html += `${item.from.surahName} (${item.from.ayah}) → ${item.to.surahName} (${item.to.ayah})<br>`;
+                        html += `<small>ص ${item.startPage}-${item.endPage}</small>`;
+                    });
+                } else {
+                    html += '-';
+                }
+                html += `</td>`;
+                
+                html += `</tr>`;
+            });
+
+            html += `</tbody></table></div>`;
+
+            pdfContainer.innerHTML = html;
+            
+            setTimeout(() => {
+                window.print();
+                pdfContainer.innerHTML = '';
+            }, 500);
+        }
+    </script>
+</body>
+</html>
