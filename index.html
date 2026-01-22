@@ -296,7 +296,7 @@
 
         .ayah-range {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             padding: 0.5rem;
             background: white;
             border-radius: 6px;
@@ -452,9 +452,9 @@
                 </div>
 
                 <div class="form-group">
-                    <label>بداية الحفظ - السورة</label>
+                    <label>بداية الحفظ</label>
                     <select id="memStartSurah">
-                        <option value="">اختر السورة...</option>
+                        <option value="">اختر بداية الحفظ...</option>
                     </select>
                 </div>
             </div>
@@ -531,21 +531,21 @@
             const planKey = planType === "1" ? "1_page" : "0.5_page";
             const surahSelect = document.getElementById('memStartSurah');
             
-            surahSelect.innerHTML = '<option value="">اختر السورة...</option>';
+            surahSelect.innerHTML = '<option value="">اختر بداية الحفظ...</option>';
             
-            const index = memorizationData[planKey].index;
-            const sortedSurahs = Object.keys(index).sort((a, b) => index[a] - index[b]);
+            const planData = memorizationData[planKey].data;
             
-            sortedSurahs.forEach(surah => {
+            // Show each entry with its index
+            planData.forEach((entry, index) => {
                 const option = document.createElement('option');
-                option.value = surah;
-                option.textContent = surah;
+                option.value = index;
+                option.textContent = entry;
                 surahSelect.appendChild(option);
             });
             
-            // Set default to المرسلات
-            if (sortedSurahs.includes('المرسلات')) {
-                surahSelect.value = 'المرسلات';
+            // Set default to first entry
+            if (planData.length > 0) {
+                surahSelect.value = "0";
             }
         }
 
@@ -649,9 +649,9 @@
                 return;
             }
 
-            const memStartSurah = document.getElementById('memStartSurah').value;
-            if (!memStartSurah) {
-                alert('الرجاء اختيار سورة بداية الحفظ');
+            const memStartIndex = document.getElementById('memStartSurah').value;
+            if (memStartIndex === "") {
+                alert('الرجاء اختيار بداية الحفظ');
                 return;
             }
 
@@ -666,7 +666,7 @@
                 const plan = create30DayPlan({
                     studentName,
                     memPlan,
-                    memStartSurah,
+                    memStartIndex: parseInt(memStartIndex),
                     bigRevSurah,
                     bigRevAyah,
                     bigReviewPages
@@ -683,12 +683,7 @@
             const planKey = config.memPlan === "1" ? "1_page" : "0.5_page";
             const planData = memorizationData[planKey];
             
-            // Find starting index for memorization
-            const startIndex = planData.index[config.memStartSurah];
-            if (startIndex === undefined) {
-                alert('لم يتم العثور على السورة المحددة في خطة الحفظ');
-                return null;
-            }
+            const startIndex = config.memStartIndex;
             
             // Get starting page for big review
             const bigRevStartPage = getPageForAyah(config.bigRevSurah, config.bigRevAyah);
@@ -720,10 +715,19 @@
                     }
                     
                     const startPageData = QuranData.Page[startPage];
-                    const endPageData = QuranData.Page[endPage + 1] || QuranData.Page[604];
+                    const endPageData = QuranData.Page[Math.min(endPage + 1, 604)];
                     
                     const fromAbsolute = getAbsoluteAyahNumber(startPageData[0], startPageData[1]);
-                    const toAbsolute = getAbsoluteAyahNumber(endPageData[0], endPageData[1]) - 1;
+                    
+                    // For the end, we need to get the last ayah of the endPage
+                    let toAbsolute;
+                    if (endPage === 604) {
+                        // Last page - last ayah of An-Nas
+                        toAbsolute = 6236;
+                    } else {
+                        // Get the ayah before the start of next page
+                        toAbsolute = getAbsoluteAyahNumber(endPageData[0], endPageData[1]) - 1;
+                    }
                     
                     const fromInfo = getSurahAndAyahFromAbsolute(fromAbsolute);
                     const toInfo = getSurahAndAyahFromAbsolute(toAbsolute);
@@ -750,11 +754,29 @@
             return {
                 studentName: config.studentName,
                 memPlan: config.memPlan,
-                memStartSurah: config.memStartSurah,
+                memStartEntry: planData.data[startIndex],
                 bigRevStartPage: bigRevStartPage,
                 bigReviewPages: config.bigReviewPages,
                 days: days
             };
+        }
+
+        function formatBigReviewText(item) {
+            let fromText = item.from.surahName;
+            let toText = item.to.surahName;
+            
+            // Don't show ayah 1 if starting from beginning
+            if (item.from.ayah !== 1) {
+                fromText += ` ${item.from.ayah}`;
+            }
+            
+            // Don't show ayah if ending at last ayah of previous surah
+            // (which means we're at ayah 0 of next surah conceptually)
+            if (item.to.ayah !== 0 && item.to.ayah !== item.to.totalAyahs) {
+                toText += ` ${item.to.ayah}`;
+            }
+            
+            return `${fromText} → ${toText}`;
         }
 
         function displayPlan(plan) {
@@ -767,7 +789,7 @@
             let html = `
                 <div class="plan-header">
                     <h2>خطة الطالب: ${plan.studentName}</h2>
-                    <p>خطة الحفظ: ${planName} | بداية الحفظ: ${plan.memStartSurah}</p>
+                    <p>خطة الحفظ: ${planName} | بداية: ${plan.memStartEntry}</p>
                     <p>المراجعة الكبرى: ${plan.bigReviewPages} صفحات يومياً من صفحة ${plan.bigRevStartPage}</p>
                 </div>
 
@@ -826,9 +848,11 @@
                     day.bigReview.forEach(item => {
                         html += `
                             <div class="ayah-range">
-                                <span>من: <strong>${item.from.surahName}</strong> آية ${item.from.ayah}</span>
-                                <span>إلى: <strong>${item.to.surahName}</strong> آية ${item.to.ayah}</span>
-
+                                <span>${formatBigReviewText(item)}</span>
+                            </div>
+                            <div style="text-align: center; color: var(--primary); font-weight: 600; margin-top: 0.5rem;">
+                                صفحة ${item.startPage} - ${item.endPage}
+                            </div>
                         `;
                     });
                     html += `</div></div>`;
@@ -858,7 +882,7 @@
                     <div class="pdf-header">
                         <h1>خطة تحفيظ القرآن الكريم - 30 يوم</h1>
                         <p style="font-size: 1.1rem; margin-top: 8px;"><strong>الطالب:</strong> ${currentPlan.studentName}</p>
-                        <p style="font-size: 1rem;"><strong>خطة الحفظ:</strong> ${planName} | بداية: ${currentPlan.memStartSurah}</p>
+                        <p style="font-size: 1rem;"><strong>خطة الحفظ:</strong> ${planName} | بداية: ${currentPlan.memStartEntry}</p>
                         <p style="font-size: 1rem;"><strong>المراجعة الكبرى:</strong> ${currentPlan.bigReviewPages} صفحات يومياً</p>
                     </div>
                     
@@ -892,7 +916,7 @@
                 html += `<td>`;
                 if (day.bigReview.length > 0) {
                     day.bigReview.forEach(item => {
-                        html += `${item.from.surahName} (${item.from.ayah}) → ${item.to.surahName} (${item.to.ayah})<br>`;
+                        html += `${formatBigReviewText(item)}<br>`;
                         // html += `<small>ص ${item.startPage}-${item.endPage}</small>`;
                     });
                 } else {
