@@ -27,26 +27,33 @@
             font-family: 'Cairo', sans-serif;
             background: linear-gradient(135deg, #F8F6F0 0%, #E8E4D8 100%);
             color: var(--text);
-            padding: 2rem;
+            padding: 1.25rem;
             min-height: 100vh;
         }
 
         .container {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
             background: var(--surface);
-            border-radius: 20px;
-            box-shadow: 0 20px 60px var(--shadow);
+            border-radius: 18px;
+            box-shadow: 0 16px 48px var(--shadow);
             overflow: hidden;
         }
 
         .header {
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
             color: white;
-            padding: 2.5rem;
-            text-align: center;
+            padding: 1.4rem 1.6rem;
             position: relative;
             overflow: hidden;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .header-content {
+            flex: 1;
+            text-align: center;
         }
 
         .header::before {
@@ -62,21 +69,31 @@
 
         .header h1 {
             font-family: 'Amiri', serif;
-            font-size: 2.5rem;
+            font-size: 2rem;
             font-weight: 700;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.35rem;
             position: relative;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.12);
         }
 
         .header p {
-            font-size: 1.1rem;
+            font-size: 0.95rem;
             opacity: 0.95;
             position: relative;
+            line-height: 1.4;
+        }
+
+        .logo {
+            width: 56px;
+            height: 56px;
+            object-fit: contain;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.12);
+            padding: 6px;
         }
 
         .form-container {
-            padding: 2rem;
+            padding: 1.4rem;
             background: var(--bg);
             border-bottom: 2px solid var(--border);
         }
@@ -106,68 +123,57 @@
         .form-group label {
             font-weight: 600;
             color: var(--primary);
-            font-size: 1rem;
+            font-size: 0.95rem;
         }
 
         .form-group input,
-        .form-group select {
-            padding: 0.875rem;
+        .form-group textarea,
+        .table input,
+        #studentsTable input {
+            padding: 0.7rem 0.85rem;
             border: 2px solid var(--border);
             border-radius: 12px;
             font-family: 'Cairo', sans-serif;
-            font-size: 1rem;
+            font-size: 0.95rem;
             transition: all 0.3s ease;
             background: white;
         }
 
+        .form-group select,
+        .table select,
+        #studentsTable select {
+            padding: 0.7rem 0.85rem;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            background: white;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 24 14'%3E%3Cpath fill='none' stroke='%232C5F2D' stroke-width='2' d='M2 2l10 10L22 2'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: calc(100% - 12px) center;
+            background-size: 12px;
+        }
+
+        select::-ms-expand {
+            display: none;
+        }
+
         .form-group input:focus,
-        .form-group select:focus {
+        .form-group select:focus,
+        .form-group textarea:focus,
+        .table select:focus,
+        .table input:focus,
+        #studentsTable select:focus,
+        #studentsTable input:focus {
             outline: none;
             border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(44, 95, 45, 0.1);
         }
 
-        .plan-selector {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-        }
-
-        .plan-option {
-            padding: 1.5rem;
-            border: 3px solid var(--border);
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-align: center;
-            background: white;
-        }
-
-        .plan-option:hover {
-            border-color: var(--primary-light);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px var(--shadow);
-        }
-
-        .plan-option.selected {
-            border-color: var(--primary);
-            background: linear-gradient(135deg, rgba(44, 95, 45, 0.05) 0%, rgba(151, 188, 98, 0.05) 100%);
-        }
-
-        .plan-option input[type="radio"] {
-            display: none;
-        }
-
-        .plan-option .title {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: var(--primary);
-            margin-bottom: 0.5rem;
-        }
-
-        .plan-option .description {
-            font-size: 0.9rem;
-            color: #666;
+        .hidden-block {
+            display: none !important;
         }
 
         .btn-container {
@@ -178,11 +184,11 @@
         }
 
         .btn {
-            padding: 1rem 2.5rem;
+            padding: 0.85rem 2rem;
             border: none;
             border-radius: 12px;
             font-family: 'Cairo', sans-serif;
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -229,8 +235,8 @@
 
         .plan-header h2 {
             font-family: 'Amiri', serif;
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
+            font-size: 1.6rem;
+            margin-bottom: 0.35rem;
         }
 
         .days-grid {
@@ -301,6 +307,43 @@
             background: white;
             border-radius: 6px;
             font-size: 0.95rem;
+        }
+
+        .table-toolbar {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin: 0.5rem 0 1rem;
+            flex-wrap: wrap;
+        }
+
+        .table-toolbar label {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 0.95rem;
+        }
+
+        #studentsTable th,
+        #studentsTable td {
+            padding: 0.45rem 0.6rem;
+            line-height: 1.25;
+        }
+
+        #studentsTable select,
+        #studentsTable input {
+            width: 100%;
+            min-width: 70px;
+            font-size: 0.9rem;
+        }
+
+        #studentsTable .btn.btn-secondary {
+            padding: 0.35rem 0.65rem;
+            border-radius: 10px;
+        }
+
+        .compact-note {
+            color: #666;
+            font-size: 0.85rem;
         }
 
         /* PDF Styles */
@@ -412,6 +455,56 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 0.8rem;
+            }
+
+            .container {
+                border-radius: 14px;
+            }
+
+            .header {
+                flex-direction: row-reverse;
+                align-items: center;
+                padding: 1rem;
+            }
+
+            .header h1 {
+                font-size: 1.45rem;
+            }
+
+            .header p {
+                font-size: 0.9rem;
+            }
+
+            .logo {
+                width: 48px;
+                height: 48px;
+            }
+
+            .form-container {
+                padding: 1rem;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            #studentsTable {
+                font-size: 0.85rem;
+            }
+
+            .btn-container {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
     </style>
 </head>
 <body>
@@ -422,63 +515,106 @@
 
     <div class="container">
         <div class="header">
-            <h1>📖 مخطط تحفيظ القرآن الكريم - 30 يوم</h1>
-            <p>نظام متكامل لخطط الحفظ والمراجعة المخصصة</p>
+            <img src="logo.jpg" alt="الشعار" class="logo">
+            <div class="header-content">
+                <h1>📖 مخطط تحفيظ القرآن الكريم - 30 يوم</h1>
+                <p>نظام متكامل لخطط الحفظ والمراجعة المخصصة</p>
+            </div>
         </div>
 
         <div class="form-container">
             <div class="form-group" style="margin-bottom: 2rem;">
-                <label>اسم الطالب</label>
-                <input type="text" value="خالد" id="studentName" placeholder="أدخل اسم الطالب">
+                <label>بيانات الطلاب (حتى 30 طالباً)</label>
+                <textarea id="studentNames" rows="4" placeholder="اكتب لكل طالب: رقم-الاسم في سطر منفصل (مثال: 1-أحمد)"></textarea>
+                <small style="display:block; margin-top:0.5rem; color:#666;">إذا لم تكتب رقم الطالب، سيتم توليد رقم تلقائياً.</small>
             </div>
 
-            <!-- Memorization Section -->
-            <div class="section-header">📖 إعدادات الحفظ</div>
-            <div class="form-grid">
-                <div class="form-group" style="grid-column: 1 / -1;">
-                    <label>نوع خطة الحفظ</label>
-                    <div class="plan-selector">
-                        <label class="plan-option selected">
-                            <input type="radio" name="memPlan" value="1" checked onchange="updateMemorizationSurahs()">
-                            <div class="title">📄 صفحة واحدة يومياً</div>
-                            <div class="description">خطة الحفظ القياسية</div>
-                        </label>
-                        <label class="plan-option">
-                            <input type="radio" name="memPlan" value="0.5" onchange="updateMemorizationSurahs()">
-                            <div class="title">📃 نصف صفحة يومياً</div>
-                            <div class="description">خطة أبطأ وأكثر تركيزاً</div>
-                        </label>
+            <div class="form-group" style="margin-bottom: 2rem;">
+                <label>جدول إعدادات الطلاب</label>
+                <div class="table-toolbar">
+                    <label for="globalMemPlan">الاختيار الافتراضي لنوع الحفظ</label>
+                    <select id="globalMemPlan">
+                        <option value="1">صفحة يومياً</option>
+                        <option value="0.5">نصف صفحة يومياً</option>
+                        <option value="none">بدون حفظ (مراجعة)</option>
+                    </select>
+                    <span class="compact-note">يُطبَّق فوراً على كل الطلاب ويمكن تعديله لكل طالب.</span>
+                </div>
+                <div style="overflow-x: auto;">
+                    <table id="studentsTable" class="pdf-table" style="width:100%; font-size:0.9rem;">
+                        <thead>
+                            <tr>
+                                <th style="width:40px;">م</th>
+                                <th style="width:80px;">رقم الطالب</th>
+                                <th>اسم الطالب</th>
+                                <th style="width:130px;">نوع الحفظ</th>
+                                <th>بداية الحفظ</th>
+                                <th style="width:110px;">مراجعة فقط؟</th>
+                                <th style="width:150px;">سورة المراجعة الصغرى</th>
+                                <th style="width:90px;">آية البداية</th>
+                                <th style="width:90px;">صفحات المراجعة الصغرى</th>
+                                <th>سورة بداية المراجعة الكبرى</th>
+                                <th style="width:80px;">آية البداية</th>
+                                <th style="width:80px;">صفحات المراجعة</th>
+                                <th style="width:80px;">طباعة فردية</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- سيتم تعبئته تلقائياً -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="hidden-block" id="memorizationWrapper">
+                <!-- Memorization Section -->
+                <div class="section-header">📖 إعدادات الحفظ</div>
+                <div class="form-grid">
+                    <div class="form-group" style="grid-column: 1 / -1;">
+                        <label>نوع خطة الحفظ</label>
+                        <div class="plan-selector">
+                            <label class="plan-option selected">
+                                <input type="radio" name="memPlan" value="1" checked onchange="updateMemorizationSurahs()">
+                                <div class="title">📄 صفحة واحدة يومياً</div>
+                                <div class="description">خطة الحفظ القياسية</div>
+                            </label>
+                            <label class="plan-option">
+                                <input type="radio" name="memPlan" value="0.5" onchange="updateMemorizationSurahs()">
+                                <div class="title">📃 نصف صفحة يومياً</div>
+                                <div class="description">خطة أبطأ وأكثر تركيزاً</div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>بداية الحفظ</label>
+                        <select id="memStartSurah">
+                            <option value="">اختر بداية الحفظ...</option>
+                        </select>
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label>بداية الحفظ</label>
-                    <select id="memStartSurah">
-                        <option value="">اختر بداية الحفظ...</option>
-                    </select>
-                </div>
-            </div>
+                <!-- Big Review Section -->
+                <div class="section-header">📚 إعدادات المراجعة الكبرى</div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>بداية المراجعة - السورة</label>
+                        <select id="bigReviewSurah" onchange="updateBigReviewAyahOptions()">
+                            <!-- Will be populated by JS -->
+                        </select>
+                    </div>
 
-            <!-- Big Review Section -->
-            <div class="section-header">📚 إعدادات المراجعة الكبرى</div>
-            <div class="form-grid">
-                <div class="form-group">
-                    <label>بداية المراجعة - السورة</label>
-                    <select id="bigReviewSurah" onchange="updateBigReviewAyahOptions()">
-                        <!-- Will be populated by JS -->
-                    </select>
-                </div>
+                    <div class="form-group">
+                        <label>بداية المراجعة - الآية</label>
+                        <select id="bigReviewAyah">
+                            <!-- Will be populated by JS -->
+                        </select>
+                    </div>
 
-                <div class="form-group">
-                    <label>بداية المراجعة - الآية</label>
-                    <select id="bigReviewAyah">
-                        <!-- Will be populated by JS -->
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>عدد الصفحات يومياً</label>
-                    <input type="number" id="bigReviewPages" value="5" min="1">
+                    <div class="form-group">
+                        <label>عدد الصفحات يومياً</label>
+                        <input type="number" id="bigReviewPages" value="5" min="1">
+                    </div>
                 </div>
             </div>
 
@@ -497,6 +633,7 @@
 
         let memorizationData = MEMORIZATION_DATA;
         let currentPlan = null;
+        let globalMemPlanValue = "1";
 
         // Initialize form when page loads
         window.addEventListener('DOMContentLoaded', function() {
@@ -507,6 +644,18 @@
             populateBigReviewDropdowns();
             updateMemorizationSurahs();
             setupPlanSelector();
+
+            const globalMemPlanSelect = document.getElementById('globalMemPlan');
+            if (globalMemPlanSelect) {
+                globalMemPlanSelect.value = globalMemPlanValue;
+                globalMemPlanSelect.addEventListener('change', (e) => {
+                    handleGlobalMemPlanChange(e.target.value);
+                });
+            }
+
+            const namesInput = document.getElementById('studentNames');
+            namesInput.addEventListener('input', renderStudentsTable);
+            renderStudentsTable();
         }
 
         function setupPlanSelector() {
@@ -515,33 +664,391 @@
                 option.addEventListener('click', function() {
                     options.forEach(opt => opt.classList.remove('selected'));
                     this.classList.add('selected');
+                    // إعادة تحميل بدايات الحفظ للطلاب عند تغيير نوع الخطة
+                    updateMemorizationSurahs();
+                    const radio = this.querySelector('input[name="memPlan"]');
+                    if (radio) {
+                        globalMemPlanValue = radio.value;
+                        const globalMemSelect = document.getElementById('globalMemPlan');
+                        if (globalMemSelect) {
+                            globalMemSelect.value = globalMemPlanValue;
+                        }
+                    }
+                    renderStudentsTable();
                 });
             });
         }
 
+        function handleGlobalMemPlanChange(value) {
+            globalMemPlanValue = value;
+            if (value === '1' || value === '0.5') {
+                const radio = document.querySelector(`input[name="memPlan"][value="${value}"]`);
+                const labels = document.querySelectorAll('.plan-option');
+                labels.forEach(l => l.classList.remove('selected'));
+                if (radio && radio.parentElement) {
+                    radio.checked = true;
+                    radio.parentElement.classList.add('selected');
+                    updateMemorizationSurahs();
+                }
+            }
+            renderStudentsTable();
+        }
+
+        function getCurrentPlanKey() {
+            const planType = document.querySelector('input[name="memPlan"]:checked').value;
+            return planType === "1" ? "1_page" : "0.5_page";
+        }
+
         function updateMemorizationSurahs() {
             if (!memorizationData) return;
-            
-            const planType = document.querySelector('input[name="memPlan"]:checked').value;
-            const planKey = planType === "1" ? "1_page" : "0.5_page";
+
+            const planKey = getCurrentPlanKey();
             const surahSelect = document.getElementById('memStartSurah');
-            
-            surahSelect.innerHTML = '<option value="">اختر بداية الحفظ...</option>';
-            
             const planData = memorizationData[planKey].data;
-            
-            // Show each entry with its index
-            planData.forEach((entry, index) => {
-                const option = document.createElement('option');
-                option.value = index;
-                option.textContent = entry;
-                surahSelect.appendChild(option);
-            });
-            
-            // Set default to first entry
-            if (planData.length > 0) {
-                surahSelect.value = "0";
+
+            if (surahSelect) {
+                surahSelect.innerHTML = '<option value="">اختر بداية الحفظ...</option>';
+
+                planData.forEach((entry, index) => {
+                    const option = document.createElement('option');
+                    option.value = index;
+                    option.textContent = entry;
+                    surahSelect.appendChild(option);
+                });
+
+                if (planData.length > 0) {
+                    surahSelect.value = "0";
+                }
             }
+        }
+
+        function parseStudentLines() {
+            const input = document.getElementById('studentNames').value || '';
+            const lines = input.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+
+            return lines.map((line, idx) => {
+                const dashIndex = line.indexOf('-');
+                if (dashIndex !== -1) {
+                    const idPart = line.slice(0, dashIndex).trim();
+                    const namePart = line.slice(dashIndex + 1).trim();
+                    const id = idPart || String(idx + 1);
+                    const name = namePart || line;
+                    return { id, name };
+                }
+                return { id: String(idx + 1), name: line };
+            });
+        }
+
+        function populateSurahSelect(select, selectedValue) {
+            select.innerHTML = '';
+            for (let i = 1; i < QuranData.Sura.length; i++) {
+                const surah = QuranData.Sura[i];
+                if (surah && surah.length > 0) {
+                    const option = document.createElement('option');
+                    option.value = i;
+                    option.textContent = `${i}. ${surah[4]}`;
+                    select.appendChild(option);
+                }
+            }
+            if (selectedValue) {
+                select.value = selectedValue;
+            }
+        }
+
+        function populateAyahSelect(select, surahIndex, selectedAyah) {
+            select.innerHTML = '';
+            const surah = QuranData.Sura[surahIndex];
+            if (!surah) return;
+            const ayahCount = surah[1];
+            for (let i = 1; i <= ayahCount; i++) {
+                const option = document.createElement('option');
+                option.value = i;
+                option.textContent = i;
+                select.appendChild(option);
+            }
+            if (selectedAyah) {
+                select.value = selectedAyah;
+            }
+        }
+
+        function getRealPageCount() {
+            let lastReal = QuranData.Page.length - 1;
+            while (lastReal > 0 && QuranData.Page[lastReal] && QuranData.Page[lastReal][0] > 114) {
+                lastReal--;
+            }
+            return lastReal;
+        }
+
+        function getPageStartAbsolute(pageIndex) {
+            const page = QuranData.Page[pageIndex];
+            return getAbsoluteAyahNumber(page[0], page[1]);
+        }
+
+        function getPageEndAbsolute(pageIndex) {
+            const totalPages = getRealPageCount();
+            if (pageIndex === totalPages) {
+                const lastSurah = QuranData.Sura[114];
+                return lastSurah[0] + lastSurah[1];
+            }
+            const nextPage = QuranData.Page[pageIndex + 1];
+            return getAbsoluteAyahNumber(nextPage[0], nextPage[1]) - 1;
+        }
+
+        function buildReviewSchedule(startSurah, startAyah, pagesPerDay, endPageInclusive = null, startPageOverride = null, totalPagesOverride = null) {
+            const totalPages = totalPagesOverride || getRealPageCount();
+            const rawStart = startPageOverride || getPageForAyah(startSurah, startAyah);
+            const startPage = Math.min(rawStart, totalPages);
+            const endPage = endPageInclusive ? (endPageInclusive < 1 ? totalPages : endPageInclusive) : totalPages;
+            const pagesCount = Math.max(parseInt(pagesPerDay) || 0, 0);
+            const totalSlots = 30 * pagesCount;
+
+            const subsetLength = endPage >= startPage
+                ? (endPage - startPage + 1)
+                : ((totalPages - startPage + 1) + endPage);
+
+            const scheduledPages = [];
+
+            if (pagesCount === 0) {
+                return { startPage, endPage, pagesCount, totalPages, scheduledPages };
+            }
+
+            for (let i = 0; i < totalSlots; i++) {
+                const offset = i % subsetLength;
+                let pageIndex = startPage + offset;
+                if (pageIndex > totalPages) {
+                    pageIndex = pageIndex - totalPages;
+                }
+                scheduledPages.push(pageIndex);
+            }
+
+            return { startPage, endPage, pagesCount, totalPages, scheduledPages };
+        }
+
+        function computeRangeForDay(schedule, day) {
+            if (!schedule || schedule.pagesCount === 0) return null;
+            const startSlot = (day - 1) * schedule.pagesCount;
+            const endSlot = startSlot + schedule.pagesCount;
+            if (startSlot >= schedule.scheduledPages.length) return null;
+
+            const dayPages = schedule.scheduledPages.slice(startSlot, endSlot);
+            if (dayPages.length === 0) return null;
+
+            const startPage = dayPages[0];
+            const endPage = dayPages[dayPages.length - 1];
+
+            const fromAbsolute = getPageStartAbsolute(startPage);
+            const toAbsolute = getPageEndAbsolute(endPage);
+
+            const fromInfo = getSurahAndAyahFromAbsolute(fromAbsolute);
+            let toInfo = getSurahAndAyahFromAbsolute(toAbsolute);
+
+            if (toInfo && toInfo.ayah === 1 && toInfo.surah > 1) {
+                const prevSurahIndex = toInfo.surah - 1;
+                const prevSurah = QuranData.Sura[prevSurahIndex];
+                toInfo = {
+                    surah: prevSurahIndex,
+                    ayah: prevSurah[1],
+                    surahName: prevSurah[4],
+                    totalAyahs: prevSurah[1]
+                };
+            }
+
+            if (fromInfo && toInfo) {
+                return {
+                    from: fromInfo,
+                    to: toInfo,
+                    startPage,
+                    endPage
+                };
+            }
+            return null;
+        }
+
+        function renderStudentsTable() {
+            const students = parseStudentLines();
+            const tbody = document.querySelector('#studentsTable tbody');
+            if (!tbody) return;
+
+            tbody.innerHTML = '';
+
+            if (students.length === 0) {
+                return;
+            }
+
+            const defaultMemStart = document.getElementById('memStartSurah') ? document.getElementById('memStartSurah').value : '0';
+            const defaultRevSurah = document.getElementById('bigReviewSurah') ? parseInt(document.getElementById('bigReviewSurah').value) : 78;
+            const defaultRevAyah = document.getElementById('bigReviewAyah') ? parseInt(document.getElementById('bigReviewAyah').value) : 1;
+            const defaultRevPages = document.getElementById('bigReviewPages') ? parseInt(document.getElementById('bigReviewPages').value) : 5;
+            const defaultMinorSurah = defaultRevSurah;
+            const defaultMinorAyah = defaultRevAyah;
+            const defaultMinorPages = isNaN(defaultRevPages) ? 2 : Math.max(1, defaultRevPages);
+            const globalChoice = ['1', '0.5', 'none'].includes(globalMemPlanValue) ? globalMemPlanValue : '1';
+
+            students.slice(0, 30).forEach((student, index) => {
+                const tr = document.createElement('tr');
+                tr.dataset.studentId = student.id;
+                tr.dataset.studentName = student.name;
+
+                const tdIndex = document.createElement('td');
+                tdIndex.textContent = index + 1;
+                tr.appendChild(tdIndex);
+
+                const tdId = document.createElement('td');
+                tdId.textContent = student.id;
+                tr.appendChild(tdId);
+
+                const tdName = document.createElement('td');
+                tdName.textContent = student.name;
+                tr.appendChild(tdName);
+
+                const tdMemType = document.createElement('td');
+                const memAmountSelect = document.createElement('select');
+                memAmountSelect.className = 'student-mem-amount';
+                memAmountSelect.innerHTML = `
+                    <option value="1">صفحة</option>
+                    <option value="0.5">نصف صفحة</option>
+                    <option value="none">بدون حفظ (مراجعة)</option>
+                `;
+                memAmountSelect.value = globalChoice;
+                tdMemType.appendChild(memAmountSelect);
+                tr.appendChild(tdMemType);
+
+                const tdMem = document.createElement('td');
+                const memSelect = document.createElement('select');
+                memSelect.className = 'student-mem-start';
+                const populateMemStartForAmount = (amount, keepValue) => {
+                    if (amount === 'none') {
+                        memSelect.innerHTML = '<option value="">لا يوجد حفظ</option>';
+                        memSelect.value = '';
+                        memSelect.disabled = true;
+                        memSelect.style.opacity = 0.5;
+                        return;
+                    }
+                    const planKeyRow = amount === '1' ? '1_page' : '0.5_page';
+                    const dataRow = memorizationData[planKeyRow].data;
+                    const prev = keepValue ? memSelect.value : null;
+                    memSelect.innerHTML = '';
+                    dataRow.forEach((entry, idx) => {
+                        const option = document.createElement('option');
+                        option.value = idx;
+                        option.textContent = entry;
+                        memSelect.appendChild(option);
+                    });
+                    if (prev && prev !== '') {
+                        memSelect.value = prev;
+                    } else if (dataRow.length > 0) {
+                        memSelect.value = defaultMemStart || '0';
+                    }
+                    memSelect.disabled = false;
+                    memSelect.style.opacity = 1;
+                };
+                populateMemStartForAmount(memAmountSelect.value, false);
+                tdMem.appendChild(memSelect);
+                tr.appendChild(tdMem);
+
+                const tdReviewOnly = document.createElement('td');
+                tdReviewOnly.style.textAlign = 'center';
+                const reviewOnlyToggle = document.createElement('input');
+                reviewOnlyToggle.type = 'checkbox';
+                reviewOnlyToggle.className = 'student-review-only';
+                tdReviewOnly.appendChild(reviewOnlyToggle);
+                tr.appendChild(tdReviewOnly);
+
+                const tdMinorSurah = document.createElement('td');
+                const minorSurahSelect = document.createElement('select');
+                minorSurahSelect.className = 'student-minor-surah';
+                populateSurahSelect(minorSurahSelect, defaultMinorSurah);
+                tdMinorSurah.appendChild(minorSurahSelect);
+                tr.appendChild(tdMinorSurah);
+
+                const tdMinorAyah = document.createElement('td');
+                const minorAyahSelect = document.createElement('select');
+                minorAyahSelect.className = 'student-minor-ayah';
+                populateAyahSelect(minorAyahSelect, defaultMinorSurah, defaultMinorAyah);
+                tdMinorAyah.appendChild(minorAyahSelect);
+                tr.appendChild(tdMinorAyah);
+
+                minorSurahSelect.addEventListener('change', function() {
+                    const surahIndex = parseInt(this.value);
+                    populateAyahSelect(minorAyahSelect, surahIndex, 1);
+                });
+
+                const tdMinorPages = document.createElement('td');
+                const minorPagesInput = document.createElement('input');
+                minorPagesInput.type = 'number';
+                minorPagesInput.min = '1';
+                minorPagesInput.value = String(defaultMinorPages);
+                minorPagesInput.className = 'student-minor-pages';
+                tdMinorPages.appendChild(minorPagesInput);
+                tr.appendChild(tdMinorPages);
+
+                const tdRevSurah = document.createElement('td');
+                const revSurahSelect = document.createElement('select');
+                revSurahSelect.className = 'student-rev-surah';
+                populateSurahSelect(revSurahSelect, defaultRevSurah);
+                tdRevSurah.appendChild(revSurahSelect);
+                tr.appendChild(tdRevSurah);
+
+                const tdRevAyah = document.createElement('td');
+                const revAyahSelect = document.createElement('select');
+                revAyahSelect.className = 'student-rev-ayah';
+                populateAyahSelect(revAyahSelect, defaultRevSurah, defaultRevAyah);
+                tdRevAyah.appendChild(revAyahSelect);
+                tr.appendChild(tdRevAyah);
+
+                revSurahSelect.addEventListener('change', function() {
+                    const surahIndex = parseInt(this.value);
+                    populateAyahSelect(revAyahSelect, surahIndex, 1);
+                });
+
+                const tdRevPages = document.createElement('td');
+                const revPagesInput = document.createElement('input');
+                revPagesInput.type = 'number';
+                revPagesInput.min = '1';
+                revPagesInput.value = isNaN(defaultRevPages) ? '5' : String(defaultRevPages);
+                revPagesInput.className = 'student-rev-pages';
+                tdRevPages.appendChild(revPagesInput);
+                tr.appendChild(tdRevPages);
+
+                const tdPrint = document.createElement('td');
+                const printBtn = document.createElement('button');
+                printBtn.type = 'button';
+                printBtn.className = 'btn btn-secondary';
+                printBtn.textContent = '📄';
+                printBtn.title = 'طباعة خطة هذا الطالب فقط';
+                printBtn.addEventListener('click', function() {
+                    downloadSingleStudent(index);
+                });
+                tdPrint.appendChild(printBtn);
+                tr.appendChild(tdPrint);
+
+                const setReviewMode = (isReviewOnly) => {
+                    reviewOnlyToggle.checked = isReviewOnly;
+                    memSelect.disabled = isReviewOnly;
+                    memSelect.style.opacity = isReviewOnly ? 0.5 : 1;
+                    [minorSurahSelect, minorAyahSelect, minorPagesInput].forEach(el => {
+                        el.disabled = !isReviewOnly;
+                        el.style.opacity = isReviewOnly ? 1 : 0.45;
+                    });
+                };
+
+                memAmountSelect.addEventListener('change', () => {
+                    const reviewOnly = memAmountSelect.value === 'none';
+                    populateMemStartForAmount(memAmountSelect.value, true);
+                    setReviewMode(reviewOnly);
+                });
+
+                reviewOnlyToggle.addEventListener('change', () => {
+                    const reviewOnly = reviewOnlyToggle.checked;
+                    memAmountSelect.value = reviewOnly ? 'none' : (globalChoice === 'none' ? '1' : globalChoice);
+                    populateMemStartForAmount(memAmountSelect.value, true);
+                    setReviewMode(reviewOnly);
+                });
+
+                setReviewMode(memAmountSelect.value === 'none');
+
+                tbody.appendChild(tr);
+            });
         }
 
         function populateBigReviewDropdowns() {
@@ -685,126 +1192,64 @@
 
         function create30DayPlan(config) {
             const days = [];
-            const planKey = config.memPlan === "1" ? "1_page" : "0.5_page";
-            const planData = memorizationData[planKey];
-            
-            const startIndex = config.memStartIndex;
-
-            // Get starting page for big review (by ayah)
-            const rawBigRevStartPage = getPageForAyah(config.bigRevSurah, config.bigRevAyah);
-
-            // Determine total real mushaf pages (exclude the sentinel page that
-            // uses a non-existent surah index > 114).
-            const getRealPageCount = () => {
-                let lastReal = QuranData.Page.length - 1;
-                while (lastReal > 0 && QuranData.Page[lastReal] && QuranData.Page[lastReal][0] > 114) {
-                    lastReal--;
-                }
-                return lastReal;
-            };
+            const usesMemorization = config.memPlan !== "none";
+            const planKey = usesMemorization ? (config.memPlan === "1" ? "1_page" : "0.5_page") : null;
+            const planData = usesMemorization ? memorizationData[planKey] : null;
+            const startIndex = usesMemorization ? config.memStartIndex : 0;
 
             const totalPages = getRealPageCount();
-            const bigRevStartPage = Math.min(rawBigRevStartPage, totalPages);
+            const bigStartPage = Math.min(getPageForAyah(config.bigRevSurah, config.bigRevAyah), totalPages);
+            const bigReviewSchedule = buildReviewSchedule(config.bigRevSurah, config.bigRevAyah, config.bigReviewPages, null, bigStartPage, totalPages);
 
-            // Helpers to convert a page index (1-based) to absolute ayah range
-            const getPageStartAbsolute = (pageIndex) => {
-                const page = QuranData.Page[pageIndex];
-                return getAbsoluteAyahNumber(page[0], page[1]);
-            };
-
-            const getPageEndAbsolute = (pageIndex) => {
-                if (pageIndex === totalPages) {
-                    // Last real page: last ayah of سورة الناس
-                    const lastSurah = QuranData.Sura[114];
-                    return lastSurah[0] + lastSurah[1];
-                }
-                const nextPage = QuranData.Page[pageIndex + 1];
-                return getAbsoluteAyahNumber(nextPage[0], nextPage[1]) - 1;
-            };
-
-            // Pre-compute sequence of pages used for big review across the 30 days.
-            // We only cycle within the range [bigRevStartPage .. totalPages].
-            // That means when we reach the end of the Qur'an, we start again
-            // from the chosen starting surah (e.g. النبأ), not from البقرة.
-            const pagesPerDay = Math.max(config.bigReviewPages, 0);
-            const totalBigReviewSlots = 30 * pagesPerDay;
-            const scheduledPages = [];
-
-            const subsetLength = totalPages - bigRevStartPage + 1;
-
-            for (let i = 0; i < totalBigReviewSlots; i++) {
-                const pageIndex = bigRevStartPage + (i % subsetLength);
-                scheduledPages.push(pageIndex);
-            }
+            // Minor review window ends just before big review start page (wraps around if needed)
+            const minorEndPage = bigStartPage === 1 ? totalPages : bigStartPage - 1;
+            const minorReviewSchedule = usesMemorization ? null : buildReviewSchedule(
+                config.minorReviewSurah,
+                config.minorReviewAyah,
+                config.minorReviewPages,
+                minorEndPage,
+                null,
+                totalPages
+            );
 
             for (let day = 1; day <= 30; day++) {
                 const memIndex = startIndex + day - 1;
-                
+
                 const dayPlan = {
                     day: day,
-                    memorization: memIndex < planData.data.length ? planData.data[memIndex] : '',
+                    memorization: '',
                     minorReview: '',
                     bigReview: []
                 };
 
-                // Minor Review = Previous day's memorization
-                if (day > 1) {
-                    const prevMemIndex = startIndex + day - 2;
-                    dayPlan.minorReview = prevMemIndex < planData.data.length ? planData.data[prevMemIndex] : '';
+                if (usesMemorization && planData) {
+                    dayPlan.memorization = memIndex < planData.data.length ? planData.data[memIndex] : '';
+
+                    if (day > 1) {
+                        const prevMemIndex = startIndex + day - 2;
+                        dayPlan.minorReview = prevMemIndex < planData.data.length ? planData.data[prevMemIndex] : '';
+                    }
+                } else if (minorReviewSchedule) {
+                    const minorRange = computeRangeForDay(minorReviewSchedule, day);
+                    if (minorRange) {
+                        dayPlan.minorReview = formatBigReviewText(minorRange);
+                    }
                 }
 
-                // Big Review - use scheduled pages for this day (handles wrap-around correctly)
-                if (pagesPerDay > 0) {
-                    const startSlot = (day - 1) * pagesPerDay;
-                    const endSlot = startSlot + pagesPerDay;
-
-                    if (startSlot < scheduledPages.length) {
-                        const dayPages = scheduledPages.slice(startSlot, endSlot);
-
-                        if (dayPages.length > 0) {
-                            const startPage = dayPages[0];
-                            const endPage = dayPages[dayPages.length - 1];
-
-                            const fromAbsolute = getPageStartAbsolute(startPage);
-                            const toAbsolute = getPageEndAbsolute(endPage);
-
-                            const fromInfo = getSurahAndAyahFromAbsolute(fromAbsolute);
-                            let toInfo = getSurahAndAyahFromAbsolute(toAbsolute);
-
-                            // If the calculated end is exactly at the first ayah of a surah,
-                            // show the previous surah's last ayah instead (so a range like
-                            // "النبأ → التكوير 29" instead of "النبأ → الإنفطار 1").
-                            if (toInfo && toInfo.ayah === 1 && toInfo.surah > 1) {
-                                const prevSurahIndex = toInfo.surah - 1;
-                                const prevSurah = QuranData.Sura[prevSurahIndex];
-                                toInfo = {
-                                    surah: prevSurahIndex,
-                                    ayah: prevSurah[1],
-                                    surahName: prevSurah[4],
-                                    totalAyahs: prevSurah[1]
-                                };
-                            }
-
-                            if (fromInfo && toInfo) {
-                                dayPlan.bigReview.push({
-                                    from: fromInfo,
-                                    to: toInfo,
-                                    startPage: startPage,
-                                    endPage: endPage
-                                });
-                            }
-                        }
-                    }
+                const bigRange = computeRangeForDay(bigReviewSchedule, day);
+                if (bigRange) {
+                    dayPlan.bigReview.push(bigRange);
                 }
 
                 days.push(dayPlan);
             }
 
             return {
+                studentId: config.studentId || '',
                 studentName: config.studentName,
                 memPlan: config.memPlan,
-                memStartEntry: planData.data[startIndex],
-                bigRevStartPage: bigRevStartPage,
+                memStartEntry: usesMemorization && planData ? planData.data[startIndex] : '',
+                bigRevStartPage: bigReviewSchedule.startPage,
                 bigReviewPages: config.bigReviewPages,
                 days: days
             };
@@ -825,7 +1270,7 @@
                 toText += ` ${item.to.ayah}`;
             }
             
-            return `${fromText} → ${toText}`;
+            return `${fromText} ← ${toText}`;
         }
 
         function displayPlan(plan) {
@@ -833,12 +1278,13 @@
             
             const container = document.getElementById('planDisplay');
             
-            const planName = plan.memPlan === "1" ? "صفحة واحدة يومياً" : "نصف صفحة يومياً";
+            const planName = plan.memPlan === "1" ? "صفحة واحدة يومياً" : (plan.memPlan === "0.5" ? "نصف صفحة يومياً" : "مراجعة فقط");
+            const memStartText = plan.memStartEntry ? ` | بداية: ${plan.memStartEntry}` : '';
             
             let html = `
                 <div class="plan-header">
                     <h2>خطة الطالب: ${plan.studentName}</h2>
-                    <p>خطة الحفظ: ${planName} | بداية: ${plan.memStartEntry}</p>
+                    <p>خطة الحفظ: ${planName}${memStartText}</p>
                     <p>المراجعة الكبرى: ${plan.bigReviewPages} صفحات يومياً من صفحة ${plan.bigRevStartPage}</p>
                 </div>
 
@@ -876,7 +1322,7 @@
                             </div>
                         </div>
                     `;
-                } else if (day.day === 1) {
+                } else if (day.day === 1 && plan.memPlan !== 'none') {
                     html += `
                         <div class="section">
                             <div class="section-title">🔄 المراجعة الصغرى</div>
@@ -917,97 +1363,143 @@
             container.scrollIntoView({ behavior: 'smooth' });
         }
 
-        function downloadPDF() {
-            const studentName = document.getElementById('studentName').value.trim();
-            if (!studentName) {
-                alert('الرجاء إدخال اسم الطالب');
-                return;
-            }
-
+        function buildPlansHTMLFromRows(rows) {
             if (!memorizationData) {
                 alert('جاري تحميل بيانات الحفظ... الرجاء المحاولة مرة أخرى');
-                return;
+                return '';
             }
+            let html = '';
 
-            const memStartIndex = document.getElementById('memStartSurah').value;
-            if (memStartIndex === "") {
-                alert('الرجاء اختيار بداية الحفظ');
-                return;
-            }
+            rows.forEach((row, index) => {
+                const studentId = row.dataset.studentId || '';
+                const studentName = row.dataset.studentName || '';
 
-            const memPlan = document.querySelector('input[name="memPlan"]:checked').value;
-            const bigRevSurah = parseInt(document.getElementById('bigReviewSurah').value);
-            const bigRevAyah = parseInt(document.getElementById('bigReviewAyah').value);
-            const bigReviewPages = parseInt(document.getElementById('bigReviewPages').value);
+                const memStartSelect = row.querySelector('.student-mem-start');
+                const memAmountSelect = row.querySelector('.student-mem-amount');
+                const reviewOnlyToggle = row.querySelector('.student-review-only');
+                const minorSurahSelect = row.querySelector('.student-minor-surah');
+                const minorAyahSelect = row.querySelector('.student-minor-ayah');
+                const minorPagesInput = row.querySelector('.student-minor-pages');
+                const revSurahSelect = row.querySelector('.student-rev-surah');
+                const revAyahSelect = row.querySelector('.student-rev-ayah');
+                const revPagesInput = row.querySelector('.student-rev-pages');
 
-            const plan = create30DayPlan({
-                studentName,
-                memPlan,
-                memStartIndex: parseInt(memStartIndex),
-                bigRevSurah,
-                bigRevAyah,
-                bigReviewPages
+                const memStartIndex = memStartSelect ? parseInt(memStartSelect.value) : 0;
+                const reviewOnly = reviewOnlyToggle ? reviewOnlyToggle.checked : false;
+                let memPlan = memAmountSelect ? memAmountSelect.value : (document.querySelector('input[name="memPlan"]:checked').value);
+                if (reviewOnly || memPlan === 'none') {
+                    memPlan = 'none';
+                }
+                const bigRevSurah = revSurahSelect ? parseInt(revSurahSelect.value) : 78;
+                const bigRevAyah = revAyahSelect ? parseInt(revAyahSelect.value) : 1;
+                const bigReviewPages = revPagesInput ? parseInt(revPagesInput.value) : 5;
+                const minorReviewSurah = minorSurahSelect ? parseInt(minorSurahSelect.value) : bigRevSurah;
+                const minorReviewAyah = minorAyahSelect ? parseInt(minorAyahSelect.value) : bigRevAyah;
+                const minorReviewPages = minorPagesInput ? parseInt(minorPagesInput.value) : 2;
+
+                const plan = create30DayPlan({
+                    studentId,
+                    studentName,
+                    memPlan,
+                    memStartIndex,
+                    bigRevSurah,
+                    bigRevAyah,
+                    bigReviewPages,
+                    minorReviewSurah,
+                    minorReviewAyah,
+                    minorReviewPages
+                });
+
+                currentPlan = plan; // keep last one for any other use
+
+                const planName = plan.memPlan === "1" ? "صفحة واحدة يومياً" : (plan.memPlan === "0.5" ? "نصف صفحة يومياً" : "مراجعة فقط");
+                const memStartText = plan.memStartEntry ? ` | بداية: ${plan.memStartEntry}` : '';
+
+                html += `
+                    <div class="pdf-page ${index === 0 ? 'active' : ''}">
+                        <div class="pdf-header">
+                            <h1>خطة تحفيظ القرآن الكريم - 30 يوم</h1>
+                            <p style="font-size: 1.1rem; margin-top: 8px;"><strong>رقم الطالب:</strong> ${plan.studentId}</p>
+                            <p style="font-size: 1.1rem; margin-top: 4px;"><strong>الطالب:</strong> ${plan.studentName}</p>
+                            <p style="font-size: 1rem;"><strong>خطة الحفظ:</strong> ${planName}${memStartText}</p>
+                            <p style="font-size: 1rem;"><strong>المراجعة الكبرى:</strong> ${plan.bigReviewPages} صفحات يومياً</p>
+                        </div>
+                        
+                        <table class="pdf-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 40px;">اليوم</th>
+                                    <th>الحفظ</th>
+                                    <th>المراجعة الصغرى</th>
+                                    <th>المراجعة الكبرى</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                `;
+
+                plan.days.forEach(day => {
+                    html += `<tr>`;
+                    html += `<td class="pdf-day-header">${day.day}</td>`;
+                    html += `<td>${day.memorization ? day.memorization : ''}</td>`;
+                    
+                    html += `<td>`;
+                    if (day.minorReview) {
+                        html += day.minorReview;
+                    } else if (day.day === 1) {
+                        html += '<span style="color: #999;">لا يوجد</span>';
+                    } else {
+                        html += '-';
+                    }
+                    html += `</td>`;
+                    
+                    html += `<td>`;
+                    if (day.bigReview.length > 0) {
+                        day.bigReview.forEach(item => {
+                            html += `${formatBigReviewText(item)}<br>`;
+                        });
+                    } else {
+                        html += '-';
+                    }
+                    html += `</td>`;
+                    
+                    html += `</tr>`;
+                });
+
+                html += `</tbody></table></div>`;
             });
 
-            currentPlan = plan;
+            return html;
+        }
+
+        function downloadPDF() {
+            const rows = Array.from(document.querySelectorAll('#studentsTable tbody tr'));
+            if (rows.length === 0) {
+                alert('الرجاء إدخال بيانات الطلاب أولاً');
+                return;
+            }
 
             const pdfContainer = document.getElementById('pdfContainer');
-            const planName = plan.memPlan === "1" ? "صفحة واحدة يومياً" : "نصف صفحة يومياً";
-            
-            let html = `
-                <div class="pdf-page active">
-                    <div class="pdf-header">
-                        <h1>خطة تحفيظ القرآن الكريم - 30 يوم</h1>
-                        <p style="font-size: 1.1rem; margin-top: 8px;"><strong>الطالب:</strong> ${plan.studentName}</p>
-                        <p style="font-size: 1rem;"><strong>خطة الحفظ:</strong> ${planName} | بداية: ${plan.memStartEntry}</p>
-                        <p style="font-size: 1rem;"><strong>المراجعة الكبرى:</strong> ${plan.bigReviewPages} صفحات يومياً</p>
-                    </div>
-                    
-                    <table class="pdf-table">
-                        <thead>
-                            <tr>
-                                <th style="width: 40px;">اليوم</th>
-                                <th>الحفظ</th>
-                                <th>المراجعة الصغرى</th>
-                                <th>المراجعة الكبرى</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-            `;
-
-            plan.days.forEach(day => {
-                html += `<tr>`;
-                html += `<td class="pdf-day-header">${day.day}</td>`;
-                html += `<td>${day.memorization || '-'}</td>`;
-                
-                html += `<td>`;
-                if (day.minorReview) {
-                    html += day.minorReview;
-                } else if (day.day === 1) {
-                    html += '<span style="color: #999;">لا يوجد</span>';
-                } else {
-                    html += '-';
-                }
-                html += `</td>`;
-                
-                html += `<td>`;
-                if (day.bigReview.length > 0) {
-                    day.bigReview.forEach(item => {
-                        html += `${formatBigReviewText(item)}<br>`;
-                        // html += `<small>ص ${item.startPage}-${item.endPage}</small>`;
-                    });
-                } else {
-                    html += '-';
-                }
-                html += `</td>`;
-                
-                html += `</tr>`;
-            });
-
-            html += `</tbody></table></div>`;
+            const html = buildPlansHTMLFromRows(rows);
+            if (!html) return;
 
             pdfContainer.innerHTML = html;
             
+            setTimeout(() => {
+                window.print();
+                pdfContainer.innerHTML = '';
+            }, 500);
+        }
+
+        function downloadSingleStudent(index) {
+            const rows = Array.from(document.querySelectorAll('#studentsTable tbody tr'));
+            if (index < 0 || index >= rows.length) return;
+
+            const pdfContainer = document.getElementById('pdfContainer');
+            const html = buildPlansHTMLFromRows([rows[index]]);
+            if (!html) return;
+
+            pdfContainer.innerHTML = html;
+
             setTimeout(() => {
                 window.print();
                 pdfContainer.innerHTML = '';
