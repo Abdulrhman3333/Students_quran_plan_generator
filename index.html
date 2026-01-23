@@ -1840,69 +1840,15 @@
             pdfContainer.style.display = 'block';
             pdfContainer.style.visibility = 'visible';
             
-            // Use multiple animation frames to ensure full rendering on mobile
-            let frameCount = 0;
-            const renderFrame = () => {
-                frameCount++;
-                if (frameCount >= 3) {
-                    // Wait for 3 animation frames = ~50ms on 60fps
-                    doPrint();
-                } else {
-                    requestAnimationFrame(renderFrame);
-                }
-            };
+            // Force browser reflow and wait longer on mobile
+            void pdfContainer.scrollHeight;
             
-            const doPrint = () => {
-                const images = pdfContainer.querySelectorAll('img');
-                let loadedImages = 0;
-                
-                if (images.length === 0) {
-                    // No images, use extra long delay for mobile rendering
-                    setTimeout(() => {
-                        window.print();
-                        setTimeout(() => {
-                            pdfContainer.innerHTML = '';
-                            pdfContainer.style.display = 'none';
-                        }, 100);
-                    }, 2000);
-                    return;
-                }
-                
-                const onImageDone = () => {
-                    loadedImages++;
-                    if (loadedImages === images.length) {
-                        triggerPrint();
-                    }
-                };
-                
-                let printTriggered = false;
-                const triggerPrint = () => {
-                    if (printTriggered) return;
-                    printTriggered = true;
-                    setTimeout(() => {
-                        window.print();
-                        setTimeout(() => {
-                            pdfContainer.innerHTML = '';
-                            pdfContainer.style.display = 'none';
-                        }, 100);
-                    }, 500);
-                };
-                
-                // Fallback: print after 3 seconds even if images don't load
-                const timeoutId = setTimeout(triggerPrint, 3000);
-                
-                images.forEach(img => {
-                    if (img.complete) {
-                        // Image already cached/loaded
-                        onImageDone();
-                    } else {
-                        img.addEventListener('load', onImageDone, { once: true });
-                        img.addEventListener('error', onImageDone, { once: true });
-                    }
-                });
-            };
-            
-            requestAnimationFrame(renderFrame);
+            setTimeout(() => {
+                window.print();
+                setTimeout(() => {
+                    pdfContainer.innerHTML = '';
+                }, 500);
+            }, 4000);
         }
 
         function downloadSingleStudent(index) {
@@ -1917,69 +1863,15 @@
             pdfContainer.style.display = 'block';
             pdfContainer.style.visibility = 'visible';
             
-            // Use multiple animation frames to ensure full rendering on mobile
-            let frameCount = 0;
-            const renderFrame = () => {
-                frameCount++;
-                if (frameCount >= 3) {
-                    // Wait for 3 animation frames = ~50ms on 60fps
-                    doPrint();
-                } else {
-                    requestAnimationFrame(renderFrame);
-                }
-            };
+            // Force browser reflow and wait longer on mobile
+            void pdfContainer.scrollHeight;
             
-            const doPrint = () => {
-                const images = pdfContainer.querySelectorAll('img');
-                let loadedImages = 0;
-                
-                if (images.length === 0) {
-                    // No images, use extra long delay for mobile rendering
-                    setTimeout(() => {
-                        window.print();
-                        setTimeout(() => {
-                            pdfContainer.innerHTML = '';
-                            pdfContainer.style.display = 'none';
-                        }, 100);
-                    }, 2000);
-                    return;
-                }
-                
-                const onImageDone = () => {
-                    loadedImages++;
-                    if (loadedImages === images.length) {
-                        triggerPrint();
-                    }
-                };
-                
-                let printTriggered = false;
-                const triggerPrint = () => {
-                    if (printTriggered) return;
-                    printTriggered = true;
-                    setTimeout(() => {
-                        window.print();
-                        setTimeout(() => {
-                            pdfContainer.innerHTML = '';
-                            pdfContainer.style.display = 'none';
-                        }, 100);
-                    }, 500);
-                };
-                
-                // Fallback: print after 3 seconds even if images don't load
-                const timeoutId = setTimeout(triggerPrint, 3000);
-                
-                images.forEach(img => {
-                    if (img.complete) {
-                        // Image already cached/loaded
-                        onImageDone();
-                    } else {
-                        img.addEventListener('load', onImageDone, { once: true });
-                        img.addEventListener('error', onImageDone, { once: true });
-                    }
-                });
-            };
-            
-            requestAnimationFrame(renderFrame);
+            setTimeout(() => {
+                window.print();
+                setTimeout(() => {
+                    pdfContainer.innerHTML = '';
+                }, 500);
+            }, 4000);
         }
     </script>
 </body>
