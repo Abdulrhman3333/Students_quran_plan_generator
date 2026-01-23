@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مخطط تحفيظ القرآن الكريم - 30 يوم</title>
+    <title>مخطط تحفيظ القرآن الكريم - 24 يوم</title>
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -27,16 +27,16 @@
             font-family: 'Cairo', sans-serif;
             background: linear-gradient(135deg, #F8F6F0 0%, #E8E4D8 100%);
             color: var(--text);
-            padding: 1.25rem;
+            padding: 0.5rem;
             min-height: 100vh;
         }
 
         .container {
-            max-width: 1200px;
-            margin: 0 auto;
+            max-width: 100%;
+            margin: 0;
             background: var(--surface);
-            border-radius: 18px;
-            box-shadow: 0 16px 48px var(--shadow);
+            border-radius: 12px;
+            box-shadow: 0 8px 24px var(--shadow);
             overflow: hidden;
         }
 
@@ -84,8 +84,8 @@
         }
 
         .logo {
-            width: 56px;
-            height: 56px;
+            width: 200px;
+            height: 200px;
             object-fit: contain;
             border-radius: 12px;
             background: rgba(255,255,255,0.12);
@@ -93,7 +93,7 @@
         }
 
         .form-container {
-            padding: 1.4rem;
+            padding: 1rem;
             background: var(--bg);
             border-bottom: 2px solid var(--border);
         }
@@ -350,51 +350,72 @@
         .pdf-page {
             display: none;
             background: white;
-            padding: 30px;
-            margin: 20px auto;
-            max-width: 210mm;
-            min-height: 297mm;
+            padding: 8px;
+            margin: 0px;
         }
 
         .pdf-page.active {
             display: block;
+            page-break-after: always;
         }
 
         .pdf-header {
             text-align: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 3px solid var(--primary);
+            margin-bottom: 4px;
+            padding-bottom: 3px;
+            border-bottom: 2px solid var(--primary);
+            position: relative;
+        }
+
+        .pdf-header-logo {
+            position: absolute;
+            top: -25px;   
+            left: -40px;
+            width: 100px;
+            height: 100px;
+            object-fit: contain;    
+            border-radius: 6px;
         }
 
         .pdf-header h1 {
             font-family: 'Amiri', serif;
-            font-size: 1.8rem;
+            font-size: 1.3rem;
             color: var(--primary);
-            margin-bottom: 8px;
+            margin-bottom: 2px;
+            margin-top: 0px;
+            padding: 0px;
+        }
+
+        .pdf-header p {
+            margin: 1px 0;
+            padding: 0;
+            line-height: 1.2;
         }
 
         .pdf-table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 15px;
+            margin-bottom: 0px;
+            margin-top: 4px;
         }
 
         .pdf-table th {
             background: var(--primary);
             color: white;
-            padding: 8px;
-            font-size: 0.9rem;
+            padding: 3px 4px;
+            font-size: 0.75rem;  
             text-align: center;
             border: 1px solid var(--primary);
+            line-height: 1.5;
         }
 
         .pdf-table td {
-            padding: 8px;
-            text-align: center;
+            padding: 2px;
+            text-align: right;
             border: 1px solid var(--border);
-            font-size: 0.85rem;
+            font-size: 1rem;
             vertical-align: top;
+            line-height: 1.8;
         }
 
         .pdf-table tr:nth-child(even) {
@@ -458,7 +479,7 @@
 
         @media (max-width: 768px) {
             body {
-                padding: 0.8rem;
+                padding: 0.4rem;
             }
 
             .container {
@@ -517,7 +538,7 @@
         <div class="header">
             <img src="logo.jpg" alt="الشعار" class="logo">
             <div class="header-content">
-                <h1>📖 مخطط تحفيظ القرآن الكريم - 30 يوم</h1>
+                <h1>📖 مخطط تحفيظ القرآن الكريم - 24 يوم</h1>
                 <p>نظام متكامل لخطط الحفظ والمراجعة المخصصة</p>
             </div>
         </div>
@@ -539,6 +560,28 @@
                         <option value="none">بدون حفظ (مراجعة)</option>
                     </select>
                     <span class="compact-note">يُطبَّق فوراً على كل الطلاب ويمكن تعديله لكل طالب.</span>
+                </div>
+                <div class="table-toolbar" style="margin-top: 1rem;">
+                    <label for="globalMinorReviewSurah">الاختيار الافتراضي للمراجعة الصغرى</label>
+                    <select id="globalMinorReviewSurah" onchange="updateGlobalMinorAyah()" style="width: 150px;">
+                        <!-- Will be populated by JS -->
+                    </select>
+                    <select id="globalMinorReviewAyah" style="width: 80px;">
+                        <!-- Will be populated by JS -->
+                    </select>
+                    <input type="number" id="globalMinorReviewPages" value="2" min="1" style="width: 80px;">
+                    <span class="compact-note">يُطبَّق فوراً على كل الطلاب ويمكن تعديله لكل طالب.</span>
+                </div>
+                <div class="table-toolbar" style="margin-top: 1rem;">
+                    <label for="globalBigReviewSurah">الاختيار الافتراضي للمراجعة الكبرى</label>
+                    <select id="globalBigReviewSurah" onchange="updateGlobalBigAyah()" style="width: 150px;">
+                        <!-- Will be populated by JS -->
+                    </select>
+                    <select id="globalBigReviewAyah" style="width: 80px;">
+                        <!-- Will be populated by JS -->
+                    </select>
+                    <input type="number" id="globalBigReviewPages" value="5" min="1" style="width: 80px;">
+                    <span class="compact-note">يُطبَّق فوراً على كل الطلاب ويمكن تعديله لكل طالب.</span>
                 </div>
                 <div style="overflow-x: auto;">
                     <table id="studentsTable" class="pdf-table" style="width:100%; font-size:0.9rem;">
@@ -634,14 +677,156 @@
         let memorizationData = MEMORIZATION_DATA;
         let currentPlan = null;
         let globalMemPlanValue = "1";
+        const TOTAL_PLAN_DAYS = 24;
 
         // Initialize form when page loads
         window.addEventListener('DOMContentLoaded', function() {
             initializeForm();
         });
 
+        function saveStudentDataToCache() {
+            const rows = Array.from(document.querySelectorAll('#studentsTable tbody tr'));
+            const studentsData = rows.map(row => ({
+                studentId: row.dataset.studentId || '',
+                studentName: row.dataset.studentName || '',
+                memAmount: row.querySelector('.student-mem-amount')?.value || '1',
+                memStart: row.querySelector('.student-mem-start')?.value || '0',
+                reviewOnly: row.querySelector('.student-review-only')?.checked || false,
+                minorSurah: row.querySelector('.student-minor-surah')?.value || '78',
+                minorAyah: row.querySelector('.student-minor-ayah')?.value || '1',
+                minorPages: row.querySelector('.student-minor-pages')?.value || '2',
+                revSurah: row.querySelector('.student-rev-surah')?.value || '78',
+                revAyah: row.querySelector('.student-rev-ayah')?.value || '1',
+                revPages: row.querySelector('.student-rev-pages')?.value || '5'
+            }));
+
+            const cacheData = JSON.parse(localStorage.getItem('tahfeedPlanCache') || '{}');
+            cacheData.students = studentsData;
+            localStorage.setItem('tahfeedPlanCache', JSON.stringify(cacheData));
+        }
+
+        function loadStudentDataFromCache() {
+            const cached = localStorage.getItem('tahfeedPlanCache');
+            if (!cached) return;
+
+            try {
+                const data = JSON.parse(cached);
+                if (!data.students || data.students.length === 0) return;
+
+                // Build student list from cache
+                const namesInput = document.getElementById('studentNames');
+                if (namesInput) {
+                    namesInput.value = data.students.map(s => `${s.studentId}-${s.studentName}`).join('\n');
+                }
+
+                // Trigger table rendering
+                renderStudentsTable();
+
+                // Wait a tick for table to be rendered, then populate student data
+                setTimeout(() => {
+                    const rows = Array.from(document.querySelectorAll('#studentsTable tbody tr'));
+                    rows.forEach((row, idx) => {
+                        if (idx >= data.students.length) return;
+                        const student = data.students[idx];
+
+                        const memAmountSelect = row.querySelector('.student-mem-amount');
+                        const memStartSelect = row.querySelector('.student-mem-start');
+                        const reviewOnlyToggle = row.querySelector('.student-review-only');
+                        const minorSurahSelect = row.querySelector('.student-minor-surah');
+                        const minorAyahSelect = row.querySelector('.student-minor-ayah');
+                        const minorPagesInput = row.querySelector('.student-minor-pages');
+                        const revSurahSelect = row.querySelector('.student-rev-surah');
+                        const revAyahSelect = row.querySelector('.student-rev-ayah');
+                        const revPagesInput = row.querySelector('.student-rev-pages');
+
+                        if (memAmountSelect) memAmountSelect.value = student.memAmount;
+                        if (memStartSelect) memStartSelect.value = student.memStart;
+                        if (reviewOnlyToggle) reviewOnlyToggle.checked = student.reviewOnly;
+                        if (minorSurahSelect) minorSurahSelect.value = student.minorSurah;
+                        if (minorAyahSelect) minorAyahSelect.value = student.minorAyah;
+                        if (minorPagesInput) minorPagesInput.value = student.minorPages;
+                        if (revSurahSelect) revSurahSelect.value = student.revSurah;
+                        if (revAyahSelect) revAyahSelect.value = student.revAyah;
+                        if (revPagesInput) revPagesInput.value = student.revPages;
+                    });
+                }, 100);
+            } catch (e) {
+                console.error('Error loading student data from cache:', e);
+            }
+        }
+
+        function saveDataToCache() {
+            const namesInput = document.getElementById('studentNames');
+            const globalMemPlan = document.getElementById('globalMemPlan');
+            const bigReviewSurah = document.getElementById('bigReviewSurah');
+            const bigReviewAyah = document.getElementById('bigReviewAyah');
+            const bigReviewPages = document.getElementById('bigReviewPages');
+            const globalMinorReviewSurah = document.getElementById('globalMinorReviewSurah');
+            const globalMinorReviewAyah = document.getElementById('globalMinorReviewAyah');
+            const globalMinorReviewPages = document.getElementById('globalMinorReviewPages');
+            const globalBigReviewSurah = document.getElementById('globalBigReviewSurah');
+            const globalBigReviewAyah = document.getElementById('globalBigReviewAyah');
+            const globalBigReviewPages = document.getElementById('globalBigReviewPages');
+
+            const cacheData = {
+                studentNames: namesInput ? namesInput.value : '',
+                globalMemPlan: globalMemPlan ? globalMemPlan.value : '1',
+                bigReviewSurah: bigReviewSurah ? bigReviewSurah.value : '78',
+                bigReviewAyah: bigReviewAyah ? bigReviewAyah.value : '1',
+                bigReviewPages: bigReviewPages ? bigReviewPages.value : '5',
+                globalMinorReviewSurah: globalMinorReviewSurah ? globalMinorReviewSurah.value : '78',
+                globalMinorReviewAyah: globalMinorReviewAyah ? globalMinorReviewAyah.value : '1',
+                globalMinorReviewPages: globalMinorReviewPages ? globalMinorReviewPages.value : '2',
+                globalBigReviewSurah: globalBigReviewSurah ? globalBigReviewSurah.value : '78',
+                globalBigReviewAyah: globalBigReviewAyah ? globalBigReviewAyah.value : '1',
+                globalBigReviewPages: globalBigReviewPages ? globalBigReviewPages.value : '5'
+            };
+
+            localStorage.setItem('tahfeedPlanCache', JSON.stringify(cacheData));
+        }
+
+        function loadDataFromCache() {
+            const cached = localStorage.getItem('tahfeedPlanCache');
+            if (cached) {
+                try {
+                    const data = JSON.parse(cached);
+                    const namesInput = document.getElementById('studentNames');
+                    const globalMemPlan = document.getElementById('globalMemPlan');
+                    const bigReviewSurah = document.getElementById('bigReviewSurah');
+                    const bigReviewAyah = document.getElementById('bigReviewAyah');
+                    const bigReviewPages = document.getElementById('bigReviewPages');
+                    const globalMinorReviewSurah = document.getElementById('globalMinorReviewSurah');
+                    const globalMinorReviewAyah = document.getElementById('globalMinorReviewAyah');
+                    const globalMinorReviewPages = document.getElementById('globalMinorReviewPages');
+                    const globalBigReviewSurah = document.getElementById('globalBigReviewSurah');
+                    const globalBigReviewAyah = document.getElementById('globalBigReviewAyah');
+                    const globalBigReviewPages = document.getElementById('globalBigReviewPages');
+
+                    if (namesInput && data.studentNames) namesInput.value = data.studentNames;
+                    if (globalMemPlan && data.globalMemPlan) {
+                        globalMemPlan.value = data.globalMemPlan;
+                        globalMemPlanValue = data.globalMemPlan;
+                    }
+                    if (bigReviewSurah && data.bigReviewSurah) bigReviewSurah.value = data.bigReviewSurah;
+                    if (bigReviewAyah && data.bigReviewAyah) bigReviewAyah.value = data.bigReviewAyah;
+                    if (bigReviewPages && data.bigReviewPages) bigReviewPages.value = data.bigReviewPages;
+                    if (globalMinorReviewSurah && data.globalMinorReviewSurah) globalMinorReviewSurah.value = data.globalMinorReviewSurah;
+                    if (globalMinorReviewAyah && data.globalMinorReviewAyah) globalMinorReviewAyah.value = data.globalMinorReviewAyah;
+                    if (globalMinorReviewPages && data.globalMinorReviewPages) globalMinorReviewPages.value = data.globalMinorReviewPages;
+                    if (globalBigReviewSurah && data.globalBigReviewSurah) globalBigReviewSurah.value = data.globalBigReviewSurah;
+                    if (globalBigReviewAyah && data.globalBigReviewAyah) globalBigReviewAyah.value = data.globalBigReviewAyah;
+                    if (globalBigReviewPages && data.globalBigReviewPages) globalBigReviewPages.value = data.globalBigReviewPages;
+                } catch (e) {
+                    console.error('Error loading cache:', e);
+                }
+            }
+        }
+
         function initializeForm() {
+            loadDataFromCache();
             populateBigReviewDropdowns();
+            populateGlobalMinorReviewDropdowns();
+            populateGlobalBigReviewDropdowns();
             updateMemorizationSurahs();
             setupPlanSelector();
 
@@ -650,12 +835,39 @@
                 globalMemPlanSelect.value = globalMemPlanValue;
                 globalMemPlanSelect.addEventListener('change', (e) => {
                     handleGlobalMemPlanChange(e.target.value);
+                    saveDataToCache();
                 });
             }
 
             const namesInput = document.getElementById('studentNames');
-            namesInput.addEventListener('input', renderStudentsTable);
+            namesInput.addEventListener('input', () => {
+                renderStudentsTable();
+                saveDataToCache();
+            });
+
+            const bigReviewInputs = document.querySelectorAll('#bigReviewSurah, #bigReviewAyah, #bigReviewPages');
+            bigReviewInputs.forEach(input => {
+                input.addEventListener('change', saveDataToCache);
+            });
+
+            const globalMinorReviewInputs = document.querySelectorAll('#globalMinorReviewSurah, #globalMinorReviewAyah, #globalMinorReviewPages');
+            globalMinorReviewInputs.forEach(input => {
+                input.addEventListener('change', () => {
+                    renderStudentsTable();
+                    saveDataToCache();
+                });
+            });
+
+            const globalBigReviewInputs = document.querySelectorAll('#globalBigReviewSurah, #globalBigReviewAyah, #globalBigReviewPages');
+            globalBigReviewInputs.forEach(input => {
+                input.addEventListener('change', () => {
+                    renderStudentsTable();
+                    saveDataToCache();
+                });
+            });
+
             renderStudentsTable();
+            loadStudentDataFromCache();
         }
 
         function setupPlanSelector() {
@@ -800,7 +1012,7 @@
             const startPage = Math.min(rawStart, totalPages);
             const endPage = endPageInclusive ? (endPageInclusive < 1 ? totalPages : endPageInclusive) : totalPages;
             const pagesCount = Math.max(parseInt(pagesPerDay) || 0, 0);
-            const totalSlots = 30 * pagesCount;
+            const totalSlots = TOTAL_PLAN_DAYS * pagesCount;
 
             const subsetLength = endPage >= startPage
                 ? (endPage - startPage + 1)
@@ -876,12 +1088,12 @@
             }
 
             const defaultMemStart = document.getElementById('memStartSurah') ? document.getElementById('memStartSurah').value : '0';
-            const defaultRevSurah = document.getElementById('bigReviewSurah') ? parseInt(document.getElementById('bigReviewSurah').value) : 78;
-            const defaultRevAyah = document.getElementById('bigReviewAyah') ? parseInt(document.getElementById('bigReviewAyah').value) : 1;
-            const defaultRevPages = document.getElementById('bigReviewPages') ? parseInt(document.getElementById('bigReviewPages').value) : 5;
-            const defaultMinorSurah = defaultRevSurah;
-            const defaultMinorAyah = defaultRevAyah;
-            const defaultMinorPages = isNaN(defaultRevPages) ? 2 : Math.max(1, defaultRevPages);
+            const defaultRevSurah = document.getElementById('globalBigReviewSurah') ? parseInt(document.getElementById('globalBigReviewSurah').value) : 78;
+            const defaultRevAyah = document.getElementById('globalBigReviewAyah') ? parseInt(document.getElementById('globalBigReviewAyah').value) : 1;
+            const defaultRevPages = document.getElementById('globalBigReviewPages') ? parseInt(document.getElementById('globalBigReviewPages').value) : 5;
+            const defaultMinorSurah = document.getElementById('globalMinorReviewSurah') ? parseInt(document.getElementById('globalMinorReviewSurah').value) : defaultRevSurah;
+            const defaultMinorAyah = document.getElementById('globalMinorReviewAyah') ? parseInt(document.getElementById('globalMinorReviewAyah').value) : defaultRevAyah;
+            const defaultMinorPages = document.getElementById('globalMinorReviewPages') ? parseInt(document.getElementById('globalMinorReviewPages').value) : 2;
             const globalChoice = ['1', '0.5', 'none'].includes(globalMemPlanValue) ? globalMemPlanValue : '1';
 
             students.slice(0, 30).forEach((student, index) => {
@@ -1047,6 +1259,13 @@
 
                 setReviewMode(memAmountSelect.value === 'none');
 
+                // Add cache listeners for all student inputs
+                [memAmountSelect, memSelect, reviewOnlyToggle, minorSurahSelect, minorAyahSelect, minorPagesInput, revSurahSelect, revAyahSelect, revPagesInput].forEach(input => {
+                    if (input) {
+                        input.addEventListener('change', saveStudentDataToCache);
+                    }
+                });
+
                 tbody.appendChild(tr);
             });
         }
@@ -1085,6 +1304,76 @@
                     ayahSelect.appendChild(option);
                 }
             }
+        }
+
+        function populateGlobalMinorReviewDropdowns() {
+            const globalMinorSurah = document.getElementById('globalMinorReviewSurah');
+            for (let i = 1; i < QuranData.Sura.length; i++) {
+                const surah = QuranData.Sura[i];
+                if (surah && surah.length > 0) {
+                    const option = document.createElement('option');
+                    option.value = i;
+                    option.textContent = `${i}. ${surah[4]}`;
+                    globalMinorSurah.appendChild(option);
+                }
+            }
+            globalMinorSurah.value = 78;
+            updateGlobalMinorAyah();
+        }
+
+        function updateGlobalMinorAyah() {
+            const surahSelect = document.getElementById('globalMinorReviewSurah');
+            const ayahSelect = document.getElementById('globalMinorReviewAyah');
+            const surahIndex = parseInt(surahSelect.value);
+            const surah = QuranData.Sura[surahIndex];
+            
+            ayahSelect.innerHTML = '';
+            
+            if (surah) {
+                const ayahCount = surah[1];
+                for (let i = 1; i <= ayahCount; i++) {
+                    const option = document.createElement('option');
+                    option.value = i;
+                    option.textContent = i;
+                    ayahSelect.appendChild(option);
+                }
+            }
+            saveDataToCache();
+        }
+
+        function populateGlobalBigReviewDropdowns() {
+            const globalBigSurah = document.getElementById('globalBigReviewSurah');
+            for (let i = 1; i < QuranData.Sura.length; i++) {
+                const surah = QuranData.Sura[i];
+                if (surah && surah.length > 0) {
+                    const option = document.createElement('option');
+                    option.value = i;
+                    option.textContent = `${i}. ${surah[4]}`;
+                    globalBigSurah.appendChild(option);
+                }
+            }
+            globalBigSurah.value = 78;
+            updateGlobalBigAyah();
+        }
+
+        function updateGlobalBigAyah() {
+            const surahSelect = document.getElementById('globalBigReviewSurah');
+            const ayahSelect = document.getElementById('globalBigReviewAyah');
+            const surahIndex = parseInt(surahSelect.value);
+            const surah = QuranData.Sura[surahIndex];
+            
+            ayahSelect.innerHTML = '';
+            
+            if (surah) {
+                const ayahCount = surah[1];
+                for (let i = 1; i <= ayahCount; i++) {
+                    const option = document.createElement('option');
+                    option.value = i;
+                    option.textContent = i;
+                    ayahSelect.appendChild(option);
+                }
+            }
+            saveDataToCache();
         }
 
         function getAbsoluteAyahNumber(surahIndex, ayahNumber) {
@@ -1212,7 +1501,7 @@
                 totalPages
             );
 
-            for (let day = 1; day <= 30; day++) {
+            for (let day = 1; day <= TOTAL_PLAN_DAYS; day++) {
                 const memIndex = startIndex + day - 1;
 
                 const dayPlan = {
@@ -1249,6 +1538,7 @@
                 studentName: config.studentName,
                 memPlan: config.memPlan,
                 memStartEntry: usesMemorization && planData ? planData.data[startIndex] : '',
+                minorReviewPages: !usesMemorization ? config.minorReviewPages : null,
                 bigRevStartPage: bigReviewSchedule.startPage,
                 bigReviewPages: config.bigReviewPages,
                 days: days
@@ -1278,13 +1568,14 @@
             
             const container = document.getElementById('planDisplay');
             
-            const planName = plan.memPlan === "1" ? "صفحة واحدة يومياً" : (plan.memPlan === "0.5" ? "نصف صفحة يومياً" : "مراجعة فقط");
+            const planName = plan.memPlan === "1" ? "صفحة واحدة يومياً" : (plan.memPlan === "0.5" ? "نصف صفحة يومياً" : "");
             const memStartText = plan.memStartEntry ? ` | بداية: ${plan.memStartEntry}` : '';
+            const minorReviewText = plan.minorReviewPages ? ` | المراجعة الصغرى: ${plan.minorReviewPages} صفحات يومياً` : '';
             
             let html = `
                 <div class="plan-header">
                     <h2>خطة الطالب: ${plan.studentName}</h2>
-                    <p>خطة الحفظ: ${planName}${memStartText}</p>
+                    <p>خطة الحفظ: ${planName}${memStartText}${minorReviewText}</p>
                     <p>المراجعة الكبرى: ${plan.bigReviewPages} صفحات يومياً من صفحة ${plan.bigRevStartPage}</p>
                 </div>
 
@@ -1411,18 +1702,19 @@
                 });
 
                 currentPlan = plan; // keep last one for any other use
+                space = '    ';
 
-                const planName = plan.memPlan === "1" ? "صفحة واحدة يومياً" : (plan.memPlan === "0.5" ? "نصف صفحة يومياً" : "مراجعة فقط");
-                const memStartText = plan.memStartEntry ? ` | بداية: ${plan.memStartEntry}` : '';
+                const planName = plan.memPlan === "1" ? "صفحة واحدة يومياً" : (plan.memPlan === "0.5" ? "    نصف صفحة يومياً" : "");
+                // const memStartText = plan.memStartEntry ? ` | بداية: ${plan.memStartEntry}` : '';
+                const minorReviewText = plan.minorReviewPages ? `  المراجعة الصغرى: ${plan.minorReviewPages} صفحات يومياً` : '';
 
                 html += `
                     <div class="pdf-page ${index === 0 ? 'active' : ''}">
                         <div class="pdf-header">
-                            <h1>خطة تحفيظ القرآن الكريم - 30 يوم</h1>
-                            <p style="font-size: 1.1rem; margin-top: 8px;"><strong>رقم الطالب:</strong> ${plan.studentId}</p>
-                            <p style="font-size: 1.1rem; margin-top: 4px;"><strong>الطالب:</strong> ${plan.studentName}</p>
-                            <p style="font-size: 1rem;"><strong>خطة الحفظ:</strong> ${planName}${memStartText}</p>
-                            <p style="font-size: 1rem;"><strong>المراجعة الكبرى:</strong> ${plan.bigReviewPages} صفحات يومياً</p>
+                            <img src="logo.jpg" alt="الشعار" class="pdf-header-logo">
+                            <h1>الــخــطــة الــقــرآنــيــة</h1>
+                            <p style="font-size: 1.1rem; margin-top: 1px; text-align: right; direction: rtl;"><strong>رقم الطالب:</strong> ${plan.studentName}&nbsp;&nbsp; | &nbsp;&nbsp;<strong>اسم الطالب:</strong> ${plan.studentId}</p>
+                            <p style="font-size: 1rem; text-align: right; direction: rtl;"><strong>خطة الحفظ:</strong> ${planName}${minorReviewText}&nbsp;&nbsp; | &nbsp;&nbsp;<strong>المراجعة الكبرى:</strong> ${plan.bigReviewPages} صفحات يومياً</p>
                         </div>
                         
                         <table class="pdf-table">
