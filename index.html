@@ -586,21 +586,31 @@
         }
 
         function getSurahAndAyahFromAbsolute(absoluteAyah) {
-            for (let i = 1; i < QuranData.Sura.length; i++) {
+            // Ignore the technical sentinel entry after سورة الناس and
+            // always resolve within the 114 real surahs.
+            const LAST_REAL_SURAH_INDEX = 114;
+
+            for (let i = 1; i <= LAST_REAL_SURAH_INDEX; i++) {
                 const surah = QuranData.Sura[i];
-                const nextSurah = QuranData.Sura[i + 1];
-                
+                const nextSurah = i < LAST_REAL_SURAH_INDEX ? QuranData.Sura[i + 1] : null;
+
                 if (nextSurah && absoluteAyah >= surah[0] && absoluteAyah < nextSurah[0]) {
+                    let ayah = absoluteAyah - surah[0];
+                    if (ayah < 1) ayah = 1;
+                    if (ayah > surah[1]) ayah = surah[1];
                     return {
                         surah: i,
-                        ayah: absoluteAyah - surah[0],
+                        ayah,
                         surahName: surah[4],
                         totalAyahs: surah[1]
                     };
                 } else if (!nextSurah && absoluteAyah >= surah[0]) {
+                    let ayah = absoluteAyah - surah[0];
+                    if (ayah < 1) ayah = 1;
+                    if (ayah > surah[1]) ayah = surah[1];
                     return {
                         surah: i,
-                        ayah: absoluteAyah - surah[0],
+                        ayah,
                         surahName: surah[4],
                         totalAyahs: surah[1]
                     };
@@ -679,10 +689,53 @@
             const planData = memorizationData[planKey];
             
             const startIndex = config.memStartIndex;
-            
-            // Get starting page for big review
-            const bigRevStartPage = getPageForAyah(config.bigRevSurah, config.bigRevAyah);
-            let currentBigRevPage = bigRevStartPage;
+
+            // Get starting page for big review (by ayah)
+            const rawBigRevStartPage = getPageForAyah(config.bigRevSurah, config.bigRevAyah);
+
+            // Determine total real mushaf pages (exclude the sentinel page that
+            // uses a non-existent surah index > 114).
+            const getRealPageCount = () => {
+                let lastReal = QuranData.Page.length - 1;
+                while (lastReal > 0 && QuranData.Page[lastReal] && QuranData.Page[lastReal][0] > 114) {
+                    lastReal--;
+                }
+                return lastReal;
+            };
+
+            const totalPages = getRealPageCount();
+            const bigRevStartPage = Math.min(rawBigRevStartPage, totalPages);
+
+            // Helpers to convert a page index (1-based) to absolute ayah range
+            const getPageStartAbsolute = (pageIndex) => {
+                const page = QuranData.Page[pageIndex];
+                return getAbsoluteAyahNumber(page[0], page[1]);
+            };
+
+            const getPageEndAbsolute = (pageIndex) => {
+                if (pageIndex === totalPages) {
+                    // Last real page: last ayah of سورة الناس
+                    const lastSurah = QuranData.Sura[114];
+                    return lastSurah[0] + lastSurah[1];
+                }
+                const nextPage = QuranData.Page[pageIndex + 1];
+                return getAbsoluteAyahNumber(nextPage[0], nextPage[1]) - 1;
+            };
+
+            // Pre-compute sequence of pages used for big review across the 30 days.
+            // We only cycle within the range [bigRevStartPage .. totalPages].
+            // That means when we reach the end of the Qur'an, we start again
+            // from the chosen starting surah (e.g. النبأ), not from البقرة.
+            const pagesPerDay = Math.max(config.bigReviewPages, 0);
+            const totalBigReviewSlots = 30 * pagesPerDay;
+            const scheduledPages = [];
+
+            const subsetLength = totalPages - bigRevStartPage + 1;
+
+            for (let i = 0; i < totalBigReviewSlots; i++) {
+                const pageIndex = bigRevStartPage + (i % subsetLength);
+                scheduledPages.push(pageIndex);
+            }
 
             for (let day = 1; day <= 30; day++) {
                 const memIndex = startIndex + day - 1;
@@ -700,46 +753,47 @@
                     dayPlan.minorReview = prevMemIndex < planData.data.length ? planData.data[prevMemIndex] : '';
                 }
 
-                // Big Review - cycle through pages
-                if (config.bigReviewPages > 0) {
-                    const startPage = currentBigRevPage;
-                    let endPage = currentBigRevPage + config.bigReviewPages - 1;
-                    
-                    if (endPage > 604) {
-                        endPage = 604;
-                    }
-                    
-                    const startPageData = QuranData.Page[startPage];
-                    const endPageData = QuranData.Page[Math.min(endPage + 1, 604)];
-                    
-                    const fromAbsolute = getAbsoluteAyahNumber(startPageData[0], startPageData[1]);
-                    
-                    // For the end, we need to get the last ayah of the endPage
-                    let toAbsolute;
-                    if (endPage === 604) {
-                        // Last page - last ayah of An-Nas
-                        toAbsolute = 6236;
-                    } else {
-                        // Get the ayah before the start of next page
-                        toAbsolute = getAbsoluteAyahNumber(endPageData[0], endPageData[1]) - 1;
-                    }
-                    
-                    const fromInfo = getSurahAndAyahFromAbsolute(fromAbsolute);
-                    const toInfo = getSurahAndAyahFromAbsolute(toAbsolute);
-                    
-                    if (fromInfo && toInfo) {
-                        dayPlan.bigReview.push({
-                            from: fromInfo,
-                            to: toInfo,
-                            startPage: startPage,
-                            endPage: endPage
-                        });
-                    }
-                    
-                    currentBigRevPage = endPage + 1;
-                    
-                    if (currentBigRevPage > 604) {
-                        currentBigRevPage = bigRevStartPage;
+                // Big Review - use scheduled pages for this day (handles wrap-around correctly)
+                if (pagesPerDay > 0) {
+                    const startSlot = (day - 1) * pagesPerDay;
+                    const endSlot = startSlot + pagesPerDay;
+
+                    if (startSlot < scheduledPages.length) {
+                        const dayPages = scheduledPages.slice(startSlot, endSlot);
+
+                        if (dayPages.length > 0) {
+                            const startPage = dayPages[0];
+                            const endPage = dayPages[dayPages.length - 1];
+
+                            const fromAbsolute = getPageStartAbsolute(startPage);
+                            const toAbsolute = getPageEndAbsolute(endPage);
+
+                            const fromInfo = getSurahAndAyahFromAbsolute(fromAbsolute);
+                            let toInfo = getSurahAndAyahFromAbsolute(toAbsolute);
+
+                            // If the calculated end is exactly at the first ayah of a surah,
+                            // show the previous surah's last ayah instead (so a range like
+                            // "النبأ → التكوير 29" instead of "النبأ → الإنفطار 1").
+                            if (toInfo && toInfo.ayah === 1 && toInfo.surah > 1) {
+                                const prevSurahIndex = toInfo.surah - 1;
+                                const prevSurah = QuranData.Sura[prevSurahIndex];
+                                toInfo = {
+                                    surah: prevSurahIndex,
+                                    ayah: prevSurah[1],
+                                    surahName: prevSurah[4],
+                                    totalAyahs: prevSurah[1]
+                                };
+                            }
+
+                            if (fromInfo && toInfo) {
+                                dayPlan.bigReview.push({
+                                    from: fromInfo,
+                                    to: toInfo,
+                                    startPage: startPage,
+                                    endPage: endPage
+                                });
+                            }
+                        }
                     }
                 }
 
