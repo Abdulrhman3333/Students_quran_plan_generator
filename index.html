@@ -1826,10 +1826,48 @@
 
             pdfContainer.innerHTML = html;
             
-            setTimeout(() => {
+            // Wait for images to load before printing
+            const images = pdfContainer.querySelectorAll('img');
+            let loadedCount = 0;
+            
+            if (images.length === 0) {
+                // No images, print immediately after longer delay for rendering
+                setTimeout(() => {
+                    window.print();
+                    pdfContainer.innerHTML = '';
+                }, 1000);
+                return;
+            }
+            
+            const onImageLoad = () => {
+                loadedCount++;
+                if (loadedCount === images.length) {
+                    setTimeout(() => {
+                        window.print();
+                        pdfContainer.innerHTML = '';
+                    }, 500);
+                }
+            };
+            
+            // Add timeout to print anyway after 2 seconds in case images fail
+            let printTimeout = setTimeout(() => {
                 window.print();
                 pdfContainer.innerHTML = '';
-            }, 500);
+            }, 2000);
+            
+            images.forEach(img => {
+                img.addEventListener('load', onImageLoad);
+                img.addEventListener('error', onImageLoad);
+            });
+            
+            // If all images are already cached/loaded
+            setTimeout(() => {
+                if (loadedCount === images.length) {
+                    clearTimeout(printTimeout);
+                    window.print();
+                    pdfContainer.innerHTML = '';
+                }
+            }, 100);
         }
 
         function downloadSingleStudent(index) {
@@ -1842,10 +1880,48 @@
 
             pdfContainer.innerHTML = html;
 
-            setTimeout(() => {
+            // Wait for images to load before printing
+            const images = pdfContainer.querySelectorAll('img');
+            let loadedCount = 0;
+            
+            if (images.length === 0) {
+                // No images, print immediately after longer delay for rendering
+                setTimeout(() => {
+                    window.print();
+                    pdfContainer.innerHTML = '';
+                }, 1000);
+                return;
+            }
+            
+            const onImageLoad = () => {
+                loadedCount++;
+                if (loadedCount === images.length) {
+                    setTimeout(() => {
+                        window.print();
+                        pdfContainer.innerHTML = '';
+                    }, 500);
+                }
+            };
+            
+            // Add timeout to print anyway after 2 seconds in case images fail
+            let printTimeout = setTimeout(() => {
                 window.print();
                 pdfContainer.innerHTML = '';
-            }, 500);
+            }, 2000);
+            
+            images.forEach(img => {
+                img.addEventListener('load', onImageLoad);
+                img.addEventListener('error', onImageLoad);
+            });
+            
+            // If all images are already cached/loaded
+            setTimeout(() => {
+                if (loadedCount === images.length) {
+                    clearTimeout(printTimeout);
+                    window.print();
+                    pdfContainer.innerHTML = '';
+                }
+            }, 100);
         }
     </script>
 </body>
