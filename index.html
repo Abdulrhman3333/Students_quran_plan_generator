@@ -429,7 +429,7 @@
         <div class="form-container">
             <div class="form-group" style="margin-bottom: 2rem;">
                 <label>اسم الطالب</label>
-                <input type="text" id="studentName" placeholder="أدخل اسم الطالب">
+                <input type="text" value="خالد" id="studentName" placeholder="أدخل اسم الطالب">
             </div>
 
             <!-- Memorization Section -->
@@ -483,13 +483,8 @@
             </div>
 
             <div class="btn-container">
-                <button class="btn btn-primary" onclick="generatePlan()">🎯 إنشاء الخطة</button>
-                <button class="btn btn-secondary" onclick="downloadPDF()">📄 تحميل PDF</button>
+                <button class="btn btn-primary" onclick="downloadPDF()">📄 تحميل PDF</button>
             </div>
-        </div>
-
-        <div class="plan-display" id="planDisplay">
-            <!-- Plan will be displayed here -->
         </div>
     </div>
 
@@ -869,21 +864,49 @@
         }
 
         function downloadPDF() {
-            if (!currentPlan) {
-                alert('الرجاء إنشاء خطة أولاً');
+            const studentName = document.getElementById('studentName').value.trim();
+            if (!studentName) {
+                alert('الرجاء إدخال اسم الطالب');
                 return;
             }
 
+            if (!memorizationData) {
+                alert('جاري تحميل بيانات الحفظ... الرجاء المحاولة مرة أخرى');
+                return;
+            }
+
+            const memStartIndex = document.getElementById('memStartSurah').value;
+            if (memStartIndex === "") {
+                alert('الرجاء اختيار بداية الحفظ');
+                return;
+            }
+
+            const memPlan = document.querySelector('input[name="memPlan"]:checked').value;
+            const bigRevSurah = parseInt(document.getElementById('bigReviewSurah').value);
+            const bigRevAyah = parseInt(document.getElementById('bigReviewAyah').value);
+            const bigReviewPages = parseInt(document.getElementById('bigReviewPages').value);
+
+            const plan = create30DayPlan({
+                studentName,
+                memPlan,
+                memStartIndex: parseInt(memStartIndex),
+                bigRevSurah,
+                bigRevAyah,
+                bigReviewPages
+            });
+
+            currentPlan = plan;
+
             const pdfContainer = document.getElementById('pdfContainer');
-            const planName = currentPlan.memPlan === "1" ? "صفحة واحدة يومياً" : "نصف صفحة يومياً";
+            const planName = plan.memPlan === "1" ? "صفحة واحدة يومياً" : "نصف صفحة يومياً";
             
             let html = `
                 <div class="pdf-page active">
                     <div class="pdf-header">
                         <h1>خطة تحفيظ القرآن الكريم - 30 يوم</h1>
-                        <p style="font-size: 1.1rem; margin-top: 8px;"><strong>الطالب:</strong> ${currentPlan.studentName}</p>
-                        <p style="font-size: 1rem;"><strong>خطة الحفظ:</strong> ${planName} | بداية: ${currentPlan.memStartEntry}</p>
-                        <p style="font-size: 1rem;"><strong>المراجعة الكبرى:</strong> ${currentPlan.bigReviewPages} صفحات يومياً</p>
+                        <p style="font-size: 1.1rem; margin-top: 8px;"><strong>الطالب:</strong> ${plan.studentName}</p>
+                        <p style="font-size: 1rem;"><strong>خطة الحفظ:</strong> ${planName} | بداية: ${plan.memStartEntry}</p>
+                        <p style="font-size: 1rem;"><strong>المراجعة الكبرى:</strong> ${plan.bigReviewPages} صفحات يومياً</p>
                     </div>
                     
                     <table class="pdf-table">
@@ -898,7 +921,7 @@
                         <tbody>
             `;
 
-            currentPlan.days.forEach(day => {
+            plan.days.forEach(day => {
                 html += `<tr>`;
                 html += `<td class="pdf-day-header">${day.day}</td>`;
                 html += `<td>${day.memorization || '-'}</td>`;
