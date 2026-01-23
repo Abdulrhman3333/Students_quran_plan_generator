@@ -347,6 +347,11 @@
         }
 
         /* PDF Styles */
+        #pdfContainer {
+            display: none;
+            visibility: hidden;
+        }
+
         .pdf-page {
             display: none;
             background: white;
@@ -432,12 +437,19 @@
             body {
                 background: white;
                 padding: 0;
+                margin: 0;
             }
             .container, .form-container, .plan-display {
                 display: none !important;
             }
+            #pdfContainer {
+                display: block !important;
+                visibility: visible !important;
+                width: 100%;
+            }
             .pdf-page {
                 display: block !important;
+                visibility: visible !important;
                 box-shadow: none;
                 page-break-after: always;
                 margin: 0;
@@ -1746,7 +1758,7 @@
                 const minorReviewText = plan.minorReviewPages ? `  المراجعة الصغرى: ${plan.minorReviewPages} صفحات يومياً` : '';
 
                 html += `
-                    <div class="pdf-page ${index === 0 ? 'active' : ''}">
+                    <div class="pdf-page">
                         <div class="pdf-header">
                             <img src="logo.jpg" alt="الشعار" class="pdf-header-logo">
                             <h1>الــخــطــة الــقــرآنــيــة</h1>
