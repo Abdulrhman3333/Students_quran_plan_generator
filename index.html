@@ -1837,49 +1837,72 @@
             if (!html) return;
 
             pdfContainer.innerHTML = html;
+            pdfContainer.style.display = 'block';
+            pdfContainer.style.visibility = 'visible';
             
-            // Wait for images to load before printing
-            const images = pdfContainer.querySelectorAll('img');
-            let loadedCount = 0;
-            
-            if (images.length === 0) {
-                // No images, print immediately after longer delay for rendering
-                setTimeout(() => {
-                    window.print();
-                    pdfContainer.innerHTML = '';
-                }, 1000);
-                return;
-            }
-            
-            const onImageLoad = () => {
-                loadedCount++;
-                if (loadedCount === images.length) {
-                    setTimeout(() => {
-                        window.print();
-                        pdfContainer.innerHTML = '';
-                    }, 500);
+            // Use multiple animation frames to ensure full rendering on mobile
+            let frameCount = 0;
+            const renderFrame = () => {
+                frameCount++;
+                if (frameCount >= 3) {
+                    // Wait for 3 animation frames = ~50ms on 60fps
+                    doPrint();
+                } else {
+                    requestAnimationFrame(renderFrame);
                 }
             };
             
-            // Add timeout to print anyway after 2 seconds in case images fail
-            let printTimeout = setTimeout(() => {
-                window.print();
-                pdfContainer.innerHTML = '';
-            }, 2000);
-            
-            images.forEach(img => {
-                img.addEventListener('load', onImageLoad);
-                img.addEventListener('error', onImageLoad);
-            });
-            
-            // If all images are already cached/loaded
-            setTimeout(() => {
-                if (loadedCount === images.length) {
-                    clearTimeout(printTimeout);
-                    window.print();
-                    pdfContainer.innerHTML = '';
+            const doPrint = () => {
+                const images = pdfContainer.querySelectorAll('img');
+                let loadedImages = 0;
+                
+                if (images.length === 0) {
+                    // No images, use extra long delay for mobile rendering
+                    setTimeout(() => {
+                        window.print();
+                        setTimeout(() => {
+                            pdfContainer.innerHTML = '';
+                            pdfContainer.style.display = 'none';
+                        }, 100);
+                    }, 2000);
+                    return;
                 }
-            }, 100);
+                
+                const onImageDone = () => {
+                    loadedImages++;
+                    if (loadedImages === images.length) {
+                        triggerPrint();
+                    }
+                };
+                
+                let printTriggered = false;
+                const triggerPrint = () => {
+                    if (printTriggered) return;
+                    printTriggered = true;
+                    setTimeout(() => {
+                        window.print();
+                        setTimeout(() => {
+                            pdfContainer.innerHTML = '';
+                            pdfContainer.style.display = 'none';
+                        }, 100);
+                    }, 500);
+                };
+                
+                // Fallback: print after 3 seconds even if images don't load
+                const timeoutId = setTimeout(triggerPrint, 3000);
+                
+                images.forEach(img => {
+                    if (img.complete) {
+                        // Image already cached/loaded
+                        onImageDone();
+                    } else {
+                        img.addEventListener('load', onImageDone, { once: true });
+                        img.addEventListener('error', onImageDone, { once: true });
+                    }
+                });
+            };
+            
+            requestAnimationFrame(renderFrame);
         }
 
         function downloadSingleStudent(index) {
@@ -1891,49 +1914,72 @@
             if (!html) return;
 
             pdfContainer.innerHTML = html;
-
-            // Wait for images to load before printing
-            const images = pdfContainer.querySelectorAll('img');
-            let loadedCount = 0;
+            pdfContainer.style.display = 'block';
+            pdfContainer.style.visibility = 'visible';
             
-            if (images.length === 0) {
-                // No images, print immediately after longer delay for rendering
-                setTimeout(() => {
-                    window.print();
-                    pdfContainer.innerHTML = '';
-                }, 1000);
-                return;
-            }
-            
-            const onImageLoad = () => {
-                loadedCount++;
-                if (loadedCount === images.length) {
-                    setTimeout(() => {
-                        window.print();
-                        pdfContainer.innerHTML = '';
-                    }, 500);
+            // Use multiple animation frames to ensure full rendering on mobile
+            let frameCount = 0;
+            const renderFrame = () => {
+                frameCount++;
+                if (frameCount >= 3) {
+                    // Wait for 3 animation frames = ~50ms on 60fps
+                    doPrint();
+                } else {
+                    requestAnimationFrame(renderFrame);
                 }
             };
             
-            // Add timeout to print anyway after 2 seconds in case images fail
-            let printTimeout = setTimeout(() => {
-                window.print();
-                pdfContainer.innerHTML = '';
-            }, 2000);
-            
-            images.forEach(img => {
-                img.addEventListener('load', onImageLoad);
-                img.addEventListener('error', onImageLoad);
-            });
-            
-            // If all images are already cached/loaded
-            setTimeout(() => {
-                if (loadedCount === images.length) {
-                    clearTimeout(printTimeout);
-                    window.print();
-                    pdfContainer.innerHTML = '';
+            const doPrint = () => {
+                const images = pdfContainer.querySelectorAll('img');
+                let loadedImages = 0;
+                
+                if (images.length === 0) {
+                    // No images, use extra long delay for mobile rendering
+                    setTimeout(() => {
+                        window.print();
+                        setTimeout(() => {
+                            pdfContainer.innerHTML = '';
+                            pdfContainer.style.display = 'none';
+                        }, 100);
+                    }, 2000);
+                    return;
                 }
-            }, 100);
+                
+                const onImageDone = () => {
+                    loadedImages++;
+                    if (loadedImages === images.length) {
+                        triggerPrint();
+                    }
+                };
+                
+                let printTriggered = false;
+                const triggerPrint = () => {
+                    if (printTriggered) return;
+                    printTriggered = true;
+                    setTimeout(() => {
+                        window.print();
+                        setTimeout(() => {
+                            pdfContainer.innerHTML = '';
+                            pdfContainer.style.display = 'none';
+                        }, 100);
+                    }, 500);
+                };
+                
+                // Fallback: print after 3 seconds even if images don't load
+                const timeoutId = setTimeout(triggerPrint, 3000);
+                
+                images.forEach(img => {
+                    if (img.complete) {
+                        // Image already cached/loaded
+                        onImageDone();
+                    } else {
+                        img.addEventListener('load', onImageDone, { once: true });
+                        img.addEventListener('error', onImageDone, { once: true });
+                    }
+                });
+            };
+            
+            requestAnimationFrame(renderFrame);
         }
     </script>
 </body>
