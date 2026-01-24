@@ -327,8 +327,8 @@
 
         #studentsTable th,
         #studentsTable td {
-            padding: 0.45rem 0.6rem;
-            line-height: 1.25;
+            padding: 8px;
+            line-height: 1.45;
         }
 
         #studentsTable select,
@@ -393,7 +393,7 @@
 
         .pdf-header h1 {
             font-family: 'Amiri', serif;
-            font-size: 1.1rem;
+            font-size: 1.4rem;
             color: var(--primary);
             margin-bottom: 2px;
             margin-top: 0px;
@@ -435,12 +435,12 @@
         }
 
         .pdf-table td {
-            padding: 3px 5px;
+            padding: 5px 6px;
             text-align: right;
             border: 1px solid #D5D0C1;
-            font-size: 0.8rem;
+            font-size: 0.82rem;
             vertical-align: top;
-            line-height: 1.4;
+            line-height: 1.5;
         }
 
         .pdf-table tr:nth-child(even) {
@@ -598,7 +598,7 @@
                         <option value="1">صفحة يومياً</option>
                         <option value="0.5">نصف صفحة يومياً</option>
                         <option value="0.25">ربع صفحة يومياً</option>
-                        <option value="none">بدون حفظ (مراجعة)</option>
+                        <option value="none">مراجعة</option>
                     </select>
                     <span class="compact-note">يُطبَّق فوراً على كل الطلاب ويمكن تعديله لكل طالب.</span>
                 </div>
@@ -713,8 +713,7 @@
             </div>
 
             <div class="btn-container">
-                <button class="btn btn-primary" onclick="downloadPDF()">📥تحميل المحددين ( نسخة الكمبيوتر )</button>
-                <button class="btn btn-secondary" onclick="downloadSelectedAsPDF(this)">📥تحميل المحددين ( نسخة الجوال )</button>
+                <button class="btn btn-primary" onclick="downloadSelectedAsPDF(this)">📥 تحميل PDF للطلاب المحددين</button>
             </div>
         </div>
     </div>
@@ -976,7 +975,7 @@
         }
 
         function planValueToLabel(value) {
-            if (value === "none") return "بدون حفظ (مراجعة)";
+            if (value === "none") return "";
             if (value === "2") return "صفحتان يومياً";
             if (value === "1") return "صفحة واحدة يومياً";
             if (value === "0.5") return "نصف صفحة يومياً";
@@ -1199,7 +1198,7 @@
                     <option value="1">صفحة</option>
                     <option value="0.5">نصف صفحة</option>
                     <option value="0.25">ربع صفحة</option>
-                    <option value="none">بدون حفظ (مراجعة)</option>
+                    <option value="none"مراجعة</option>
                 `;
                 memAmountSelect.value = globalChoice;
                 tdMemType.appendChild(memAmountSelect);
@@ -1840,43 +1839,6 @@
             });
 
             return html;
-        }
-
-        function downloadPDF() {
-            const allRows = Array.from(document.querySelectorAll('#studentsTable tbody tr'));
-            if (allRows.length === 0) {
-                alert('الرجاء إدخال بيانات الطلاب أولاً');
-                return;
-            }
-
-            // Filter only checked students
-            const rows = allRows.filter(row => {
-                const checkbox = row.querySelector('.student-print-checkbox');
-                return checkbox && checkbox.checked;
-            });
-
-            if (rows.length === 0) {
-                alert('الرجاء تحديد طلاب للطباعة');
-                return;
-            }
-
-            const pdfContainer = document.getElementById('pdfContainer');
-            const html = buildPlansHTMLFromRows(rows);
-            if (!html) return;
-
-            pdfContainer.innerHTML = html;
-            pdfContainer.style.display = 'block';
-            pdfContainer.style.visibility = 'visible';
-            
-            // Force browser reflow and wait longer on mobile
-            void pdfContainer.scrollHeight;
-            
-            setTimeout(() => {
-                window.print();
-                setTimeout(() => {
-                    pdfContainer.innerHTML = '';
-                }, 500);
-            }, 4000);
         }
 
         function downloadSingleStudent(index) {
