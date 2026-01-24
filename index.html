@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>مخطط تحفيظ القرآن الكريم - 24 يوم</title>
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         :root {
             --primary: #2C5F2D;
@@ -686,7 +688,8 @@
             </div>
 
             <div class="btn-container">
-                <button class="btn btn-primary" onclick="downloadPDF()">📄 تحميل الكل PDF</button>
+                <button class="btn btn-primary" onclick="downloadPDF()">�️ طباعة الكل</button>
+                <button class="btn btn-secondary" onclick="downloadSelectedAsPDF()">📥 تحميل PDF للمحددين</button>
             </div>
         </div>
     </div>
@@ -1872,6 +1875,119 @@
                     pdfContainer.innerHTML = '';
                 }, 500);
             }, 4000);
+        }
+
+        async function downloadSelectedAsPDF() {
+            const allRows = Array.from(document.querySelectorAll('#studentsTable tbody tr'));
+            if (allRows.length === 0) {
+                alert('الرجاء إدخال بيانات الطلاب أولاً');
+                return;
+            }
+
+            // Filter only checked students
+            const rows = allRows.filter(row => {
+                const checkbox = row.querySelector('.student-print-checkbox');
+                return checkbox && checkbox.checked;
+            });
+
+            if (rows.length === 0) {
+                alert('الرجاء تحديد طلاب للطباعة');
+                return;
+            }
+
+            try {
+                // Show loading message
+                const originalText = event.target.textContent;
+                event.target.textContent = '⏳ جاري إنشاء PDF...';
+                event.target.disabled = true;
+
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                
+                const pdfContainer = document.getElementById('pdfContainer');
+                
+                for (let i = 0; i < rows.length; i++) {
+                    const row = rows[i];
+                    const html = buildPlansHTMLFromRows([row]);
+                    if (!html) continue;
+
+                    pdfContainer.innerHTML = html;
+                    pdfContainer.style.display = 'block';
+                    pdfContainer.style.visibility = 'visible';
+                    pdfContainer.style.position = 'absolute';
+                    pdfContainer.style.left = '0';
+                    pdfContainer.style.top = '0';
+                    pdfContainer.style.width = '210mm';
+                    pdfContainer.style.background = 'white';
+                    
+                    // Wait for content to render
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                    
+                    // Capture the PDF page
+                    const pdfPage = pdfContainer.querySelector('.pdf-page');
+                    if (pdfPage) {
+                        pdfPage.style.display = 'block';
+                        
+                        const canvas = await html2canvas(pdfPage, {
+                            scale: 2,
+                            useCORS: true,
+                            logging: false,
+                            backgroundColor: '#ffffff',
+                            width: pdfPage.scrollWidth,
+                            height: pdfPage.scrollHeight
+                        });
+                        
+                        const imgData = canvas.toDataURL('image/jpeg', 0.95);
+                        
+                        // Add new page if not first student
+                        if (i > 0) {
+                            pdf.addPage();
+                        }
+                        
+                        // Calculate dimensions to fit A4
+                        const pdfWidth = 210;
+                        const pdfHeight = 297;
+                        const imgWidth = pdfWidth - 20; // 10mm margins
+                        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                        
+                        // Center the image
+                        const xOffset = 10;
+                        let yOffset = 10;
+                        
+                        // If image is taller than page, scale it down
+                        if (imgHeight > pdfHeight - 20) {
+                            const scaledHeight = pdfHeight - 20;
+                            const scaledWidth = (canvas.width * scaledHeight) / canvas.height;
+                            pdf.addImage(imgData, 'JPEG', (pdfWidth - scaledWidth) / 2, yOffset, scaledWidth, scaledHeight);
+                        } else {
+                            pdf.addImage(imgData, 'JPEG', xOffset, yOffset, imgWidth, imgHeight);
+                        }
+                    }
+                }
+                
+                // Clear container
+                pdfContainer.innerHTML = '';
+                pdfContainer.style.display = 'none';
+                
+                // Generate filename
+                const studentName = rows.length === 1 
+                    ? rows[0].dataset.studentName 
+                    : `${rows.length}_students`;
+                const filename = `خطة_قرآنية_${studentName}_${new Date().getTime()}.pdf`;
+                
+                // Download the PDF
+                pdf.save(filename);
+                
+                // Reset button
+                event.target.textContent = originalText;
+                event.target.disabled = false;
+                
+            } catch (error) {
+                console.error('Error generating PDF:', error);
+                alert('حدث خطأ أثناء إنشاء ملف PDF. يرجى المحاولة مرة أخرى.');
+                event.target.textContent = originalText;
+                event.target.disabled = false;
+            }
         }
     </script>
 </body>
