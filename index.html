@@ -152,10 +152,6 @@
             transition: all 0.3s ease;
             background: white;
             appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 24 14'%3E%3Cpath fill='none' stroke='%232C5F2D' stroke-width='2' d='M2 2l10 10L22 2'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: calc(100% - 12px) center;
-            background-size: 12px;
         }
 
         select::-ms-expand {
@@ -556,6 +552,26 @@
                 font-size: 0.85rem;
             }
 
+            #studentsTable th:nth-child(4),
+            #studentsTable td:nth-child(4) {
+                min-width: 200px;
+            }
+
+            #studentsTable th:nth-child(5),
+            #studentsTable td:nth-child(5) {
+                min-width: 180px;
+            }
+
+            #studentsTable th:nth-child(7),
+            #studentsTable td:nth-child(7) {
+                min-width: 220px;
+            }
+
+            #studentsTable th:nth-child(10),
+            #studentsTable td:nth-child(10) {
+                min-width: 220px;
+            }
+
             .btn-container {
                 flex-direction: column;
             }
@@ -586,7 +602,6 @@
             <div class="form-group" style="margin-bottom: 2rem;">
                 <label>بيانات الطلاب (حتى 30 طالباً)</label>
                 <textarea id="studentNames" rows="4" placeholder="اكتب لكل طالب: رقم-الاسم في سطر منفصل (مثال: 1-أحمد)"></textarea>
-                <small style="display:block; margin-top:0.5rem; color:#666;">إذا لم تكتب رقم الطالب، سيتم توليد رقم تلقائياً.</small>
             </div>
 
             <div class="form-group" style="margin-bottom: 2rem;">
@@ -975,7 +990,7 @@
         }
 
         function planValueToLabel(value) {
-            if (value === "none") return "";
+            if (value === "none") return "مراجعة";
             if (value === "2") return "صفحتان يومياً";
             if (value === "1") return "صفحة واحدة يومياً";
             if (value === "0.5") return "نصف صفحة يومياً";
@@ -1035,7 +1050,7 @@
                 if (surah && surah.length > 0) {
                     const option = document.createElement('option');
                     option.value = i;
-                    option.textContent = `${i}. ${surah[4]}`;
+                    option.textContent = `${surah[4]}`;
                     select.appendChild(option);
                 }
             }
@@ -1839,29 +1854,6 @@
             });
 
             return html;
-        }
-
-        function downloadSingleStudent(index) {
-            const rows = Array.from(document.querySelectorAll('#studentsTable tbody tr'));
-            if (index < 0 || index >= rows.length) return;
-
-            const pdfContainer = document.getElementById('pdfContainer');
-            const html = buildPlansHTMLFromRows([rows[index]]);
-            if (!html) return;
-
-            pdfContainer.innerHTML = html;
-            pdfContainer.style.display = 'block';
-            pdfContainer.style.visibility = 'visible';
-
-            // Force browser reflow and wait longer on mobile
-            void pdfContainer.scrollHeight;
-
-            setTimeout(() => {
-                window.print();
-                setTimeout(() => {
-                    pdfContainer.innerHTML = '';
-                }, 500);
-            }, 4000);
         }
 
         async function downloadSelectedAsPDF(buttonElement) {
