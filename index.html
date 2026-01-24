@@ -556,26 +556,6 @@
                 font-size: 0.85rem;
             }
 
-            #studentsTable th:nth-child(4),
-            #studentsTable td:nth-child(4) {
-                min-width: 160px;
-            }
-
-            #studentsTable th:nth-child(5),
-            #studentsTable td:nth-child(5) {
-                min-width: 140px;
-            }
-
-            #studentsTable th:nth-child(7),
-            #studentsTable td:nth-child(7) {
-                min-width: 180px;
-            }
-
-            #studentsTable th:nth-child(10),
-            #studentsTable td:nth-child(10) {
-                min-width: 180px;
-            }
-
             .btn-container {
                 flex-direction: column;
             }
@@ -610,6 +590,7 @@
             </div>
 
             <div class="form-group" style="margin-bottom: 2rem;">
+                <label>جدول إعدادات الطلاب</label>
                 <div class="table-toolbar">
                     <label for="globalMemPlan">الاختيار الافتراضي لنوع الحفظ</label>
                     <select id="globalMemPlan">
@@ -994,7 +975,7 @@
         }
 
         function planValueToLabel(value) {
-            if (value === "none") return "مراجعة";
+            if (value === "none") return "";
             if (value === "2") return "صفحتان يومياً";
             if (value === "1") return "صفحة واحدة يومياً";
             if (value === "0.5") return "نصف صفحة يومياً";
@@ -2016,4 +1997,3 @@
     </script>
 </body>
 </html>
-
