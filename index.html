@@ -152,6 +152,7 @@
             transition: all 0.3s ease;
             background: white;
             appearance: none;
+            background-image: none;
         }
 
         select::-ms-expand {
@@ -171,6 +172,10 @@
         }
 
         .hidden-block {
+            display: none !important;
+        }
+
+        .global-settings {
             display: none !important;
         }
 
@@ -552,26 +557,6 @@
                 font-size: 0.85rem;
             }
 
-            #studentsTable th:nth-child(4),
-            #studentsTable td:nth-child(4) {
-                min-width: 200px;
-            }
-
-            #studentsTable th:nth-child(5),
-            #studentsTable td:nth-child(5) {
-                min-width: 180px;
-            }
-
-            #studentsTable th:nth-child(7),
-            #studentsTable td:nth-child(7) {
-                min-width: 220px;
-            }
-
-            #studentsTable th:nth-child(10),
-            #studentsTable td:nth-child(10) {
-                min-width: 220px;
-            }
-
             .btn-container {
                 flex-direction: column;
             }
@@ -605,19 +590,7 @@
             </div>
 
             <div class="form-group" style="margin-bottom: 2rem;">
-                <label>جدول إعدادات الطلاب</label>
-                <div class="table-toolbar">
-                    <label for="globalMemPlan">الاختيار الافتراضي لنوع الحفظ</label>
-                    <select id="globalMemPlan">
-                        <option value="2">صفحتان يومياً</option>
-                        <option value="1">صفحة يومياً</option>
-                        <option value="0.5">نصف صفحة يومياً</option>
-                        <option value="0.25">ربع صفحة يومياً</option>
-                        <option value="none">مراجعة</option>
-                    </select>
-                    <span class="compact-note">يُطبَّق فوراً على كل الطلاب ويمكن تعديله لكل طالب.</span>
-                </div>
-                <div class="table-toolbar" style="margin-top: 1rem;">
+                <div class="table-toolbar global-settings" style="margin-top: 1rem;">
                     <label for="globalMinorReviewSurah">الاختيار الافتراضي للمراجعة الصغرى</label>
                     <select id="globalMinorReviewSurah" onchange="updateGlobalMinorAyah()" style="width: 150px;">
                         <!-- Will be populated by JS -->
@@ -628,7 +601,7 @@
                     <input type="number" id="globalMinorReviewPages" value="2" min="1" style="width: 80px;">
                     <span class="compact-note">يُطبَّق فوراً على كل الطلاب ويمكن تعديله لكل طالب.</span>
                 </div>
-                <div class="table-toolbar" style="margin-top: 1rem;">
+                <div class="table-toolbar global-settings" style="margin-top: 1rem;">
                     <label for="globalBigReviewSurah">الاختيار الافتراضي للمراجعة الكبرى</label>
                     <select id="globalBigReviewSurah" onchange="updateGlobalBigAyah()" style="width: 150px;">
                         <!-- Will be populated by JS -->
@@ -1854,6 +1827,29 @@
             });
 
             return html;
+        }
+
+        function downloadSingleStudent(index) {
+            const rows = Array.from(document.querySelectorAll('#studentsTable tbody tr'));
+            if (index < 0 || index >= rows.length) return;
+
+            const pdfContainer = document.getElementById('pdfContainer');
+            const html = buildPlansHTMLFromRows([rows[index]]);
+            if (!html) return;
+
+            pdfContainer.innerHTML = html;
+            pdfContainer.style.display = 'block';
+            pdfContainer.style.visibility = 'visible';
+
+            // Force browser reflow and wait longer on mobile
+            void pdfContainer.scrollHeight;
+
+            setTimeout(() => {
+                window.print();
+                setTimeout(() => {
+                    pdfContainer.innerHTML = '';
+                }, 500);
+            }, 4000);
         }
 
         async function downloadSelectedAsPDF(buttonElement) {
