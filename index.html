@@ -1923,8 +1923,13 @@
                         pdfPage.style.display = 'block';
                         pdfPage.style.pageBreakAfter = 'auto';
 
+                        // Normalize scale for cross-browser consistency (especially Safari/Apple)
+                        const devicePixelRatio = window.devicePixelRatio || 1;
+                        const baseScale = 2.5;
+                        const normalizedScale = baseScale / devicePixelRatio;
+
                         const canvas = await html2canvas(pdfPage, {
-                            scale: 2.5,
+                            scale: normalizedScale,
                             allowTaint: true,
                             useCORS: true,
                             logging: false,
