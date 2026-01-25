@@ -1791,8 +1791,11 @@
                                 <tr>
                                     <th style="width: 40px;">اليوم</th>
                                     <th>الحفظ</th>
+                                    <th style="width: 50px;">الإنجاز</th>
                                     <th>المراجعة الصغرى</th>
+                                    <th style="width: 50px;">الإنجاز</th>
                                     <th>المراجعة الكبرى</th>
+                                    <th style="width: 50px;">الإنجاز</th>
                                     <th style="width: 100px;">التهيئة</th>
                                     </tr>
                             </thead>
@@ -1803,7 +1806,9 @@
                     html += `<tr>`;
                     html += `<td class="pdf-day-header">${day.day}</td>`;
                     html += `<td>${day.memorization ? day.memorization : ''}</td>`;
-
+                    if (day.memorization) {
+                        html += `<td></td>`;// الإنجاز للحفظ
+                    } 
                     html += `<td>`;
                     if (day.minorReview) {
                         html += day.minorReview;
@@ -1813,6 +1818,7 @@
                         html += '-';
                     }
                     html += `</td>`;
+                    html += `<td></td>`; // الإنجاز للمراجعة الصغرى
 
                     html += `<td>`;
                     if (day.bigReview.length > 0) {
@@ -1823,6 +1829,7 @@
                         html += '-';
                     }
                     html += `</td>`;
+                    html += `<td></td>`; // الإنجاز للمراجعة الكبرى
                     html += `<td></td>`; // التهيئة
 
                     html += `</tr>`;
